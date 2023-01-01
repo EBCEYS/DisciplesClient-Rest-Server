@@ -89,7 +89,7 @@ public class UsersDBAdapter : IUsersDBAdapter
         try
         {
             await using Disciples2ClientDBConnext db = new();
-            (await db.Users.FirstAsync(u => u.Id == id)).IsActive = false;
+            (await db.Users.FirstAsync(u => u.Id == id && u.IsActive)).IsActive = false;
             await db.SaveChangesAsync();
             return true;
         }
