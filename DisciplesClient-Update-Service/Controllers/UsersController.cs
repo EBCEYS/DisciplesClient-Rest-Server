@@ -39,7 +39,7 @@ namespace DisciplesClient_Update_Service.Controllers
         /// <response code="401">Unauthorized.</response>
         [HttpGet("isauthorized")]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(AuthorizedInfo), 200)]
         [ProducesResponseType(401)]
         public IActionResult IsAuthorized()
         {
@@ -48,7 +48,11 @@ namespace DisciplesClient_Update_Service.Controllers
                 string name = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
                 string[] roles = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray();
 
-                return Ok($"{name} roles: {string.Join(", ", roles)}");
+                return Ok(new AuthorizedInfo()
+                {
+                    Name = name,
+                    Roles = roles
+                });
             }
             catch
             {
