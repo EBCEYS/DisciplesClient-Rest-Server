@@ -1,8 +1,8 @@
 ﻿using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
 using Disciples2ApiModels.ApiModels;
-using Disciples2ClientDataBaseLibrary.DBModels;
-using DisciplesClient_Update_Service.LogicLayer.Exceptions;
-using DisciplesClient_Update_Service.LogicLayer.Interfaces;
+using Disciples2ClientDataBaseModels.DBModels;
+using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions;
+using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,12 +10,12 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace DisciplesClient_Update_Service.LogicLayer
+namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic
 {
     /// <summary>
     /// The data server.
     /// </summary>
-    public class DataServer : IDataServer
+    public class UsersDataServer : IUsersDataServer
     {
         private readonly Logger logger;
         private readonly IUsersDBAdapter usersDBAdapter;
@@ -25,7 +25,7 @@ namespace DisciplesClient_Update_Service.LogicLayer
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="usersDBAdapter"></param>
-        public DataServer(Logger logger, IUsersDBAdapter usersDBAdapter)
+        public UsersDataServer(Logger logger, IUsersDBAdapter usersDBAdapter)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.usersDBAdapter = usersDBAdapter ?? throw new ArgumentNullException(nameof(usersDBAdapter));
@@ -56,7 +56,7 @@ namespace DisciplesClient_Update_Service.LogicLayer
                 logger.Debug("Found user {username}!", user.UserName);
                 return GenerateToken(user.UserName, user.Roles);
             }
-            throw new UserNotFoundException("User does not exists!");
+            throw new UserNotFoundException();
         }
 
         private static string GenerateToken(string userName, string[] roles)
@@ -82,7 +82,6 @@ namespace DisciplesClient_Update_Service.LogicLayer
                 issuer: Program.Issuer,
                 audience: Program.Audience,
                 claims: claimsIdentity.Claims,
-                //expires: DateTime.UtcNow + TimeSpan.FromDays(5),
                 signingCredentials:
                 new SigningCredentials(new SymmetricSecurityKey(Program.SecretKey), SecurityAlgorithms.HmacSha256));
             return new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -123,6 +122,20 @@ namespace DisciplesClient_Update_Service.LogicLayer
                 throw new UserNotFoundException();
             }
             return result;
+        }
+
+        /// <summary>
+        /// Deletes the user async.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        /// <exception cref="UserNotFoundException"></exception>
+        public async Task DeleteUserById(int id)
+        {
+            bool res = await usersDBAdapter.DeleteUserAsync(id);
+            if (!res)
+            {
+                throw new UserNotFoundException();
+            }
         }
     }
 }

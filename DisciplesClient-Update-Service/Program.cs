@@ -1,13 +1,21 @@
 using DataBase.DataBaseAdapters.UsersDataBaseAdapter;
 using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
 using Disciples2ClientDataBaseLibrary.DataBase;
-using DisciplesClient_Update_Service.LogicLayer;
-using DisciplesClient_Update_Service.LogicLayer.Interfaces;
+using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapter;
+using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapter.Interfaces;
+using DisciplesClient_Update_Service.LogicLayer.ModsLayer;
+using DisciplesClient_Update_Service.LogicLayer.ModsLayer.Interfaces;
+using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter;
+using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.DeleteModsService;
+using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.Interfaces;
+using DisciplesClient_Update_Service.LogicLayer.UsersLogic;
+using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -41,7 +49,15 @@ namespace DisciplesClient_Update_Service
         /// <summary>
         /// The users data base connection string.
         /// </summary>
-        public static string UsersDBConnectionString { get; private set; }
+        public static string D2DBConnectionString { get; private set; }
+        /// <summary>
+        /// The mods base path.
+        /// </summary>
+        public static string ModsDirBasePath { get; private set; }
+        /// <summary>
+        /// The remove queue file path. (Store the queue in json).
+        /// </summary>
+        public static string RemoveQueueFilePath { get; private set; }
         /// <summary>
         /// The main.
         /// </summary>
@@ -56,7 +72,10 @@ namespace DisciplesClient_Update_Service
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             ConfigurationManager config = builder.Configuration;
 
-            UsersDBConnectionString = config.GetConnectionString("UsersDBConnection") ?? throw new Exception("Can not find connection string 'UsersDBConnection'!");
+            D2DBConnectionString = config.GetConnectionString("D2DBConnection") ?? throw new Exception("Can not find connection string 'D2DBConnection'!");
+            
+            //Configure the directories.
+            ConfigurePaths(config);
 
             // Add services to the container.
             ConfigureJWTParams(logger, config);
@@ -67,6 +86,21 @@ namespace DisciplesClient_Update_Service
 
             // Configure the HTTP request pipeline.
             ConfigureApp(app);
+        }
+
+        private static void ConfigurePaths(ConfigurationManager config)
+        {
+            string removeQueueDirPath = Path.Combine(BasePath, "RemoveQueue");
+            RemoveQueueFilePath = Path.Combine(removeQueueDirPath, config.GetValue<string>("RemoveQueueFilePath") ?? throw new Exception("Can not find 'RemoveQueueFilePath'!"));
+            if (!Directory.Exists(removeQueueDirPath))
+            {
+                Directory.CreateDirectory(removeQueueDirPath);
+            }
+            ModsDirBasePath = Path.Combine(BasePath, "mods");
+            if (!Directory.Exists(ModsDirBasePath))
+            {
+                Directory.CreateDirectory(ModsDirBasePath);
+            }
         }
 
         private static void ConfigureJWTParams(Logger logger, ConfigurationManager config)
@@ -90,8 +124,16 @@ namespace DisciplesClient_Update_Service
         {
             builder.Services.AddDbContext<Disciples2ClientDBConnext>();
             builder.Services.AddSingleton(logger);
-            builder.Services.AddSingleton<IDataServer, DataServer>();
-            builder.Services.AddSingleton<IUsersDBAdapter, UsersDBAdapter>();
+
+            builder.Services.AddScoped<IUsersDataServer, UsersDataServer>();
+            builder.Services.AddScoped<IUsersDBAdapter, UsersDBAdapter>();
+
+            builder.Services.AddScoped<IModsDataServer, ModsDataServer>();
+            builder.Services.AddScoped<IModsFSAdapter, ModsFSAdapter>();
+            builder.Services.AddScoped<IModsDBAdapter, ModsDBAdapter>();
+
+            builder.Services.AddSingleton<ConcurrentQueue<string>>();
+            builder.Services.AddHostedService<DeleteModsHostedService>();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
@@ -103,12 +145,6 @@ namespace DisciplesClient_Update_Service
             }); ;
 
             builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddAuthorization(opt => 
-            {
-                opt.AddPolicy("IsAdmin", p => { p.RequireRole("adm", "administrator", "admin", "user", "usr"); });
-                opt.AddPolicy("IsUser", p => { p.RequireRole("user", "usr"); });
-            });
 
             builder.Services.AddAuthentication(options =>
             {
@@ -131,6 +167,7 @@ namespace DisciplesClient_Update_Service
                     IssuerSigningKey = new SymmetricSecurityKey(SecretKey),
                     RoleClaimType = ClaimTypes.Role
                 };
+                options.Validate();
             });
 
             builder.Services.AddCors();
@@ -169,7 +206,7 @@ namespace DisciplesClient_Update_Service
         }
         private static void ConfigureApp(WebApplication app)
         {
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             if (app.Environment.IsDevelopment())

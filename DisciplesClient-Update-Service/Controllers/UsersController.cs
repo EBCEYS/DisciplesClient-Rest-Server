@@ -1,7 +1,7 @@
 using Disciples2ApiModels.ApiModels;
-using Disciples2ClientDataBaseLibrary.DBModels;
-using DisciplesClient_Update_Service.LogicLayer.Exceptions;
-using DisciplesClient_Update_Service.LogicLayer.Interfaces;
+using Disciples2ClientDataBaseModels.DBModels;
+using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions;
+using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
@@ -15,19 +15,18 @@ namespace DisciplesClient_Update_Service.Controllers
     /// </summary>
     [ApiController]
     [Authorize]
-    [Produces("application/json")]
     [Route("user")]
     public class UsersController : ControllerBase
     {
         private readonly Logger logger;
-        private readonly IDataServer dataServer;
+        private readonly IUsersDataServer dataServer;
         /// <summary>
         /// The users controller ctor.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="dataServer">The data server.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public UsersController(Logger logger, IDataServer dataServer)
+        public UsersController(Logger logger, IUsersDataServer dataServer)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.dataServer = dataServer ?? throw new ArgumentNullException(nameof(dataServer));
@@ -36,9 +35,12 @@ namespace DisciplesClient_Update_Service.Controllers
         /// <summary>
         /// Checks the user is authorized.
         /// </summary>
-        /// <returns></returns>
+        /// <response code="200">Authorized.</response>
+        /// <response code="401">Unauthorized.</response>
         [HttpGet("isauthorized")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(401)]
         public IActionResult IsAuthorized()
         {
             try
@@ -64,8 +66,8 @@ namespace DisciplesClient_Update_Service.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<string>> Login([Required][FromBody]LoginModel loginModel)
         {
             logger.Debug("Login request: {username}", loginModel.UserName);
@@ -74,9 +76,9 @@ namespace DisciplesClient_Update_Service.Controllers
                 string token = await dataServer.Login(loginModel);
                 return Ok(token);
             }
-            catch(UserNotFoundException ex)
+            catch(UserNotFoundException)
             {
-                return NotFound(ex.Message);
+                return NotFound();
             }
             catch(Exception ex)
             {
@@ -91,13 +93,15 @@ namespace DisciplesClient_Update_Service.Controllers
         /// <response code="200">Successfully created.</response>
         /// <response code="400">User already exists.</response>
         /// <response code="401">Unathorized.</response>
+        /// <response code="403">You have wrong role.</response>
         /// <response code="500">Something wrong!</response>
         [HttpPost("create")]
-        [Authorize(Policy = "IsAdmin")]
-        [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 401)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [Authorize(Roles = "adm, admin, administrator")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult> CreateUser([Required][FromBody]CreateUserModel createUserModel)
         {
             logger.Debug("Create user request: {username}", createUserModel.UserName);
@@ -121,14 +125,16 @@ namespace DisciplesClient_Update_Service.Controllers
         /// </summary>
         /// <response code="200">Successfully found user.</response>
         /// <response code="401">Unathorized.</response>
+        /// <response code="403">You have wrong role.</response>
         /// <response code="404">User not found.</response>
         /// <response code="500">Something wrong!</response>
         [HttpGet("by-id")]
-        [Authorize(Policy = "IsAdmin")]
-        [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 401)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [Authorize(Roles = "adm, admin, administrator")]
+        [ProducesResponseType(typeof(User), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<User>> GetUserById([Required][FromQuery]int id)
         {
             logger.Debug("GetUserById request: {id}", id);
@@ -136,6 +142,40 @@ namespace DisciplesClient_Update_Service.Controllers
             {
                 User result = await dataServer.GetUserByIdAsync(id);
                 return Ok(result);
+            }
+            catch (UserNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Unexpected exception!");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the user by id.
+        /// </summary>
+        /// <response code="200">Successfully delete user.</response>
+        /// <response code="401">Unathorized.</response>
+        /// <response code="403">You have wrong role.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Something wrong!</response>
+        [HttpDelete("by-id")]
+        [Authorize(Roles = "adm, admin, administrator")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> DeleteUserById([Required][FromQuery] int id)
+        {
+            logger.Debug("DeleteUserById request: {id}", id);
+            try
+            {
+                await dataServer.DeleteUserById(id);
+                return Ok();
             }
             catch (UserNotFoundException)
             {

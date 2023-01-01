@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Disciples2ApiModels", "Disc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disciples2ClientDataBaseModels", "Disciples2ClientDataBaseLibrary\Disciples2ClientDataBaseModels.csproj", "{ED5C06FC-0164-4F45-AE87-C0842C7A4951}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisciplesClient-Update-ServiceTests", "DisciplesClient-Update-ServiceTests\DisciplesClient-Update-ServiceTests.csproj", "{D4A09F7F-22E7-4A55-91B1-464CF87615FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{ED5C06FC-0164-4F45-AE87-C0842C7A4951}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED5C06FC-0164-4F45-AE87-C0842C7A4951}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED5C06FC-0164-4F45-AE87-C0842C7A4951}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A09F7F-22E7-4A55-91B1-464CF87615FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A09F7F-22E7-4A55-91B1-464CF87615FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A09F7F-22E7-4A55-91B1-464CF87615FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A09F7F-22E7-4A55-91B1-464CF87615FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

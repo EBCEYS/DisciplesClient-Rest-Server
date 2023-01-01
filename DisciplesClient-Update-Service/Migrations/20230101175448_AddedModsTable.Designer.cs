@@ -3,6 +3,7 @@ using System;
 using Disciples2ClientDataBaseLibrary.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DisciplesClient_Update_Service.Migrations
 {
     [DbContext(typeof(Disciples2ClientDBConnext))]
-    partial class Disciples2ClientDBConnextModelSnapshot : ModelSnapshot
+    [Migration("20230101175448_AddedModsTable")]
+    partial class AddedModsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,14 +36,10 @@ namespace DisciplesClient_Update_Service.Migrations
                     b.Property<int>("AuthorUserId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("FirstUpdateDateTime")
+                    b.Property<DateTime>("FirstUpdateDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("LastUpdateDateTime")
+                    b.Property<DateTime>("LastUpdateDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Version")

@@ -1,6 +1,6 @@
 ﻿using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
 using Disciples2ClientDataBaseLibrary.DataBase;
-using Disciples2ClientDataBaseLibrary.DBModels;
+using Disciples2ClientDataBaseModels.DBModels;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 
@@ -20,11 +20,7 @@ public class UsersDBAdapter : IUsersDBAdapter
     /// <exception cref="ArgumentNullException"></exception>
     public UsersDBAdapter(Logger logger)
     {
-        if (logger is null)
-        {
-            throw new ArgumentNullException(nameof(logger));
-        }
-        this.logger = logger;
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     /// <summary>
     /// Logins the user if exists.
@@ -36,7 +32,7 @@ public class UsersDBAdapter : IUsersDBAdapter
     {
         try
         {
-            using Disciples2ClientDBConnext db = new();
+            await using Disciples2ClientDBConnext db = new();
             return await db.Users.Where(u => u.IsActive && u.UserName == username && u.Password == password).FirstAsync();
         }
         catch(Exception ex)
@@ -54,7 +50,7 @@ public class UsersDBAdapter : IUsersDBAdapter
     {
         try
         {
-            using Disciples2ClientDBConnext db = new();
+            await using Disciples2ClientDBConnext db = new();
             return await db.Users.Where(u => u.Id == id).FirstAsync();
         }
         catch (Exception ex)
@@ -72,7 +68,7 @@ public class UsersDBAdapter : IUsersDBAdapter
     {
         try
         {
-            using Disciples2ClientDBConnext db = new();
+            await using Disciples2ClientDBConnext db = new();
             await db.AddAsync(user);
             await db.SaveChangesAsync();
             return true;
@@ -92,7 +88,7 @@ public class UsersDBAdapter : IUsersDBAdapter
     {
         try
         {
-            using Disciples2ClientDBConnext db = new();
+            await using Disciples2ClientDBConnext db = new();
             (await db.Users.FirstAsync(u => u.Id == id)).IsActive = false;
             await db.SaveChangesAsync();
             return true;
@@ -101,6 +97,61 @@ public class UsersDBAdapter : IUsersDBAdapter
         {
             logger.Error(ex, "Error on creating new user!");
             return false;
+        }
+    }
+    /// <summary>
+    /// Gets the user by username async.
+    /// </summary>
+    /// <param name="name">The user name.</param>
+    /// <returns>The user if exists; otherwise null.</returns>
+    public async Task<User> GetUserByUserNameAsync(string name)
+    {
+        try
+        {
+            await using Disciples2ClientDBConnext db = new();
+            return await db.Users.Where(u => u.UserName == name).FirstAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Error on getting users from data base!");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Gets the author mods.
+    /// </summary>
+    /// <param name="id">The author id.</param>
+    /// <returns>Mods array if exists; otherwise null.</returns>
+    public async Task<Mod[]> GetAuthorsMods(int id)
+    {
+        try
+        {
+            await using Disciples2ClientDBConnext db = new();
+            return (await db.Users.Where(u => u.Id == id).FirstOrDefaultAsync()).Mods.ToArray();
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Error on geting mods list by user id!");
+            return null;
+        }
+    }
+    /// <summary>
+    /// Gets the author mods.
+    /// </summary>
+    /// <param name="name">The author username.</param>
+    /// <returns>Mods array if exists; otherwise null.</returns>
+    public async Task<Mod[]> GetAuthorsMods(string name)
+    {
+        try
+        {
+            await using Disciples2ClientDBConnext db = new();
+            return (await db.Users.Where(u => u.UserName == name).FirstOrDefaultAsync()).Mods.ToArray();
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Error on geting mods list by user name!");
+            return null;
         }
     }
 }

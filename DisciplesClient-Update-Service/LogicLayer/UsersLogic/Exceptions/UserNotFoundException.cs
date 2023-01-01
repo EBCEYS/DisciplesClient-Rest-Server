@@ -1,4 +1,4 @@
-﻿namespace DisciplesClient_Update_Service.LogicLayer.Exceptions
+﻿namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions
 {
     /// <summary>
     /// The user not found exception.

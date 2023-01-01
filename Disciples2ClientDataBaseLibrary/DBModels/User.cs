@@ -1,9 +1,9 @@
-﻿using Npgsql;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Disciples2ClientDataBaseLibrary.DBModels
+namespace Disciples2ClientDataBaseModels.DBModels
 {
+    [Table("Users")]
     public class User
     {
         [Key]
@@ -21,5 +21,6 @@ namespace Disciples2ClientDataBaseLibrary.DBModels
         public string[] Roles { get; set; }
         [Required]
         public bool IsActive { get; set; } = true;
+        public List<Mod> Mods { get; set; }
     }
 }

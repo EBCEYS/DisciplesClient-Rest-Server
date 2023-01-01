@@ -1,4 +1,4 @@
-﻿using Disciples2ClientDataBaseLibrary.DBModels;
+﻿using Disciples2ClientDataBaseModels.DBModels;
 
 namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface
 {
@@ -32,5 +32,23 @@ namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface
         /// <param name="id">The user id.</param>
         /// <returns>true if deleted; otherwise false.</returns>
         Task<bool> DeleteUserAsync(int id);
+        /// <summary>
+        /// Gets the user by name async.
+        /// </summary>
+        /// <param name="name">The user name.</param>
+        /// <returns></returns>
+        Task<User> GetUserByUserNameAsync(string name);
+        /// <summary>
+        /// Gets the author's mods.
+        /// </summary>
+        /// <param name="id">The author id.</param>
+        /// <returns></returns>
+        Task<Mod[]> GetAuthorsMods(int id);
+        /// <summary>
+        /// Gets the author's mods.
+        /// </summary>
+        /// <param name="name">The author's name.</param>
+        /// <returns></returns>
+        Task<Mod[]> GetAuthorsMods(string name);
     }
 }

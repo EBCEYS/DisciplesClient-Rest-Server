@@ -3,6 +3,7 @@ using System;
 using Disciples2ClientDataBaseLibrary.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DisciplesClient_Update_Service.Migrations
 {
     [DbContext(typeof(Disciples2ClientDBConnext))]
-    partial class Disciples2ClientDBConnextModelSnapshot : ModelSnapshot
+    [Migration("20230101221457_UpdateModTableDateTimeOffset")]
+    partial class UpdateModTableDateTimeOffset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

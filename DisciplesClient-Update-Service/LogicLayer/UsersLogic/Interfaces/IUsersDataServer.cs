@@ -1,12 +1,12 @@
 ﻿using Disciples2ApiModels.ApiModels;
-using Disciples2ClientDataBaseLibrary.DBModels;
+using Disciples2ClientDataBaseModels.DBModels;
 
-namespace DisciplesClient_Update_Service.LogicLayer.Interfaces
+namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces
 {
     /// <summary>
     /// The data server interface.
     /// </summary>
-    public interface IDataServer
+    public interface IUsersDataServer
     {
         /// <summary>
         /// Create the user async.
@@ -14,6 +14,12 @@ namespace DisciplesClient_Update_Service.LogicLayer.Interfaces
         /// <param name="model"></param>
         /// <returns></returns>
         Task CreateUserAsync(CreateUserModel model);
+        /// <summary>
+        /// Deletes the user async.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        Task DeleteUserById(int id);
+
         /// <summary>
         /// Gets user by id async.
         /// </summary>
