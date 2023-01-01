@@ -19,6 +19,7 @@
 
 ## Описание работы
 БД - PostgreSQL. Связь с ней идет через entity framework. Legacy datetime-ы.
+
 ![ERD](https://github.com/EBCEYS/DisciplesClient-Rest-Server/blob/main/BD_ERD.png)
 ### Пользователи
 Токен с бесконечным жизненным циклом (может потом поменяю), но по идее, обычным пользователям не нужно будет логиниться.
