@@ -13,6 +13,12 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.Interfaces
         /// <param name="modName"></param>
         /// <returns></returns>
         Task<Stream> GetModFile(string modName);
+        /// <summary>
+        /// Gets the mod files array.
+        /// </summary>
+        /// <param name="modName">The mod name.</param>
+        /// <returns></returns>
+        Task<string[]> GetModFilesAsync(string modName);
 
         /// <summary>
         /// Gets the mods names async.

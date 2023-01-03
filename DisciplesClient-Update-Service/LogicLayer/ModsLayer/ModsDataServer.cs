@@ -7,6 +7,7 @@ using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.
 using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using NLog;
+using Npgsql;
 using System.Reflection.Metadata.Ecma335;
 
 namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
@@ -190,6 +191,32 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
             {
                 logger.Error(ex, "Error on removing mod!");
                 return false;
+            }
+        }
+        /// <summary>
+        /// Gets the mod files.
+        /// </summary>
+        /// <param name="modName">The mod name.</param>
+        /// <returns>The mods files array if mod exists; otherwise null.</returns>
+        public async Task<string[]> GetModFilesAsync(string modName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(modName))
+                {
+                    throw new ArgumentException($"\"{nameof(modName)}\" не может быть неопределенным или пустым.", nameof(modName));
+                }
+                string[] files = await modsfsAdapter.GetModFilesAsync(modName);
+                if (files == null)
+                {
+                    return null;
+                }
+                return files;
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "Error on geting mod files!");
+                return null;
             }
         }
     }

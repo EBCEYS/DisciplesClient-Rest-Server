@@ -1,4 +1,5 @@
-﻿using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.Interfaces;
+﻿using Disciples2ApiModels.D2ApiModels;
+using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.Interfaces;
 using NLog;
 using System.Collections.Concurrent;
 
@@ -92,6 +93,31 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
                 catch(Exception ex)
                 {
                     logger.Error(ex, "Error on geting mod file!");
+                    return null;
+                }
+            });
+        }
+        /// <summary>
+        /// Gets the mod files list.
+        /// </summary>
+        /// <param name="modName">The mod name.</param>
+        /// <returns>The files names string array if mod exists; otherwise null;</returns>
+        public async Task<string[]> GetModFilesAsync(string modName)
+        {
+            return await Task.Run(() => 
+            {
+                try
+                {
+                    string path = Path.Combine(BaseModsPath, modName);
+                    if (!Directory.Exists(path))
+                    {
+                        throw new DirectoryNotFoundException(path);
+                    }
+                    return Directory.GetFiles(path, "*.zip").Select(str => Path.GetFileName(str)).ToArray();
+                }
+                catch(Exception ex)
+                {
+                    logger.Error(ex, "Error on geting mod files!");
                     return null;
                 }
             });

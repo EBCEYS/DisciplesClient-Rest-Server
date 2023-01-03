@@ -12,6 +12,7 @@
         /// <param name="fileName">The file name.</param>
         /// <returns></returns>
         Task<Stream> GetModFileAsync(string modName, string fileName);
+        Task<string[]> GetModFilesAsync(string modName);
 
         /// <summary>
         /// Removes the mod.
