@@ -47,9 +47,11 @@ namespace DisciplesClient_Update_Service.Controllers
             {
                 string name = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
                 string[] roles = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray();
+                int id = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(x => int.Parse(x.Value)).FirstOrDefault();
 
                 return Ok(new AuthorizedInfo()
                 {
+                    Id = id,
                     Name = name,
                     Roles = roles
                 });

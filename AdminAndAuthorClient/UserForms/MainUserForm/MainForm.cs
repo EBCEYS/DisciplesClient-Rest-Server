@@ -135,7 +135,7 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
         {
             AuthorizedInfo result = Program.HttpSender.CheckAuthorized();
             string roles = result.Roles != null ? string.Join(Environment.NewLine, result.Roles) : "ERROR";
-            MessageBox.Show($"UserName: {result.Name}{Environment.NewLine}Roles: {roles}", "Authorization info");
+            MessageBox.Show($"Id: {result.Id}{Environment.NewLine}UserName: {result.Name}{Environment.NewLine}Roles: {roles}", "Authorization info");
         }
 
         private void GetUserByIdToolStripMenuItem_Click(object sender, EventArgs e)
