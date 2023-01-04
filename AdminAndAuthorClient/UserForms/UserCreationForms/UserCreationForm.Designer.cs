@@ -123,7 +123,7 @@
             this.RolesChekListBox.Items.AddRange(new object[] {
             "admin",
             "author",
-            "user"});
+            "usr"});
             this.RolesChekListBox.Location = new System.Drawing.Point(112, 40);
             this.RolesChekListBox.Name = "RolesChekListBox";
             this.RolesChekListBox.Size = new System.Drawing.Size(166, 112);

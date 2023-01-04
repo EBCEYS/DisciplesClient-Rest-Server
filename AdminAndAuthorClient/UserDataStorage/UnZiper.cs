@@ -8,18 +8,11 @@ namespace AdminAndAuthorClient.UserDataStorage
         {
             try
             {
-                string modPath = Path.Combine(Program.GamesArchivesDir, modName);
-                if (!Directory.Exists(modPath))
-                {
-                    MessageBox.Show($"Directory {modPath} does not exists.");
-                    return;
-                }
                 if (!File.Exists(archive))
                 {
                     throw new FileNotFoundException($"Can not find archive file {archive}!");
                 }
                 UnZip(archive, extractPath);
-                File.Delete(archive);
                 UnZipedFilesDirectoryStorage.ModsInfo.TryAdd(modName, extractPath);
                 UnZipedFilesDirectoryStorage.SaveGamesDirectories();
             }
