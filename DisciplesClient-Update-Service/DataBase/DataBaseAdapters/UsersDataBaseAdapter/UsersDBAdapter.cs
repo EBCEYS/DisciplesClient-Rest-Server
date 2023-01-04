@@ -1,6 +1,8 @@
 ﻿using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
+using Disciples2ApiModels.ApiModels;
 using Disciples2ClientDataBaseLibrary.DataBase;
 using Disciples2ClientDataBaseModels.DBModels;
+using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 
@@ -39,6 +41,44 @@ public class UsersDBAdapter : IUsersDBAdapter
         {
             logger.Error(ex, "Error on trying to login async!");
             return null;
+        }
+    }
+    /// <summary>
+    /// Check if user exists.
+    /// </summary>
+    /// <param name="username">The user name.</param>
+    /// <param name="roles">The user roles.</param>
+    /// <param name="password">The user password.</param>
+    /// <returns>true if exists; otherwise false.</returns>
+    public async Task<bool> CheckUserExistsAsync(string username, string[] roles, string password)
+    {
+        try
+        {
+            await using Disciples2ClientDBConnext db = new();
+            return await db.Users.FirstOrDefaultAsync(x => x.UserName == username && x.Roles == roles && x.Password == password) != null;
+        }
+        catch(Exception)
+        {
+            return false;
+        }
+    }
+    /// <summary>
+    /// Check if user exists.
+    /// </summary>
+    /// <param name="username">The user name.</param>
+    /// <param name="roles">The user roles.</param>
+    /// <param name="password">The user password.</param>
+    /// <returns>true if exists; otherwise false.</returns>
+    public bool CheckUserExists(string username, string[] roles, string password)
+    {
+        try
+        {
+            using Disciples2ClientDBConnext db = new();
+            return db.Users.FirstOrDefault(x => x.UserName == username && x.Roles == roles && x.Password == password) != null;
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
     /// <summary>
@@ -123,7 +163,7 @@ public class UsersDBAdapter : IUsersDBAdapter
     /// </summary>
     /// <param name="id">The author id.</param>
     /// <returns>Mods array if exists; otherwise null.</returns>
-    public async Task<Mod[]> GetAuthorsMods(int id)
+    public async Task<Mod[]> GetAuthorsModsAsync(int id)
     {
         try
         {
@@ -141,7 +181,7 @@ public class UsersDBAdapter : IUsersDBAdapter
     /// </summary>
     /// <param name="name">The author username.</param>
     /// <returns>Mods array if exists; otherwise null.</returns>
-    public async Task<Mod[]> GetAuthorsMods(string name)
+    public async Task<Mod[]> GetAuthorsModsAsync(string name)
     {
         try
         {
@@ -152,6 +192,77 @@ public class UsersDBAdapter : IUsersDBAdapter
         {
             logger.Error(ex, "Error on geting mods list by user name!");
             return null;
+        }
+    }
+    /// <summary>
+    /// Changes the user password by id.
+    /// </summary>
+    /// <param name="id">The user id.</param>
+    /// <param name="model">The change password model.</param>
+    /// <returns>true if changed; otherwise false.</returns>
+    public async Task<bool> ChangePasswordAsync(int id, ChangePasswordModel model)
+    {
+        try
+        {
+            await using Disciples2ClientDBConnext db = new();
+            (await db.Users.FirstOrDefaultAsync(usr => usr.Id == id && usr.Password == model.CurrentPassword)).Password = model.NewPassword;
+            await db.SaveChangesAsync();
+            return true;
+        }
+        catch(Exception ex)
+        {
+            logger.Error(ex, "Error on changin password!");
+            return false;
+        }
+    }
+    /// <summary>
+    /// Changes the user email by id.
+    /// </summary>
+    /// <param name="id">The user id.</param>
+    /// <param name="model">The change email model.</param>
+    /// <returns>true if changed; otherwise false.</returns>
+    public async Task<bool> ChangeEmailAsync(int id, ChangeEmailModel model)
+    {
+        try
+        {
+            await using Disciples2ClientDBConnext db = new();
+            User usr = (await db.Users.FirstOrDefaultAsync(usr => usr.Id == id));
+            if (string.IsNullOrEmpty(usr.Email) || usr.Email == model.CurrentEmail)
+            {
+                usr.Email = model.NewEmail;
+            }
+            else
+            {
+                throw new UserNotFoundException();
+            }
+            await db.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Error on changin password!");
+            return false;
+        }
+    }
+    /// <summary>
+    /// Changes the user username by id.
+    /// </summary>
+    /// <param name="id">The user id.</param>
+    /// <param name="model">The change username model.</param>
+    /// <returns>true if changed; otherwise false.</returns>
+    public async Task<bool> ChangeUserNameAsync(int id, ChangeUserNameModel model)
+    {
+        try
+        {
+            await using Disciples2ClientDBConnext db = new();
+            (await db.Users.FirstOrDefaultAsync(usr => usr.Id == id && usr.UserName == model.CurrentUserName)).UserName = model.NewUserName;
+            await db.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.Error(ex, "Error on changin password!");
+            return false;
         }
     }
 }

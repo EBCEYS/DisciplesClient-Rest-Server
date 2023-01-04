@@ -5,7 +5,7 @@ namespace AdminAndAuthorClient.UserDataStorage
 {
     public static class UnZipedFilesDirectoryStorage
     {
-        public static ConcurrentDictionary<string, string> ModsInfo { get; private set; } = new();
+        public static ConcurrentDictionary<string, string> ModsInfo { get; private set; } = new(); // TODO: Переделать на класс ModInfo
 
         public static void LoadGamesDirectories()
         {

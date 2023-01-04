@@ -191,5 +191,104 @@ namespace DisciplesClient_Update_Service.Controllers
                 return StatusCode(500);
             }
         }
+        /// <summary>
+        /// Changes the user password.
+        /// </summary>
+        /// <param name="model">The change password model.</param>
+        /// <response code="200">Successfully changed.</response>
+        /// <response code="401">Unathorized.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Something wrong!</response>
+        [Authorize]
+        [HttpPost("password")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> ChangePassword([Required][FromBody] ChangePasswordModel model)
+        {
+            try
+            {
+                int userId = int.Parse(User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value);
+                logger.Debug("Change password: {userId}", userId);
+                await dataServer.ChangePasswordAsync(userId, model);
+                return Ok();
+            }
+            catch(UserNotFoundException) 
+            {
+                return NotFound();
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "Error on changing password!");
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Changes the user Email.
+        /// </summary>
+        /// <param name="model">The change Email model.</param>
+        /// <response code="200">Successfully changed.</response>
+        /// <response code="401">Unathorized.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Something wrong!</response>
+        [Authorize]
+        [HttpPost("email")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> ChangeEmail([Required][FromBody] ChangeEmailModel model)
+        {
+            try
+            {
+                int userId = int.Parse(User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value);
+                logger.Debug("Change Email: {userId}", userId);
+                await dataServer.ChangeEmailAsync(userId, model);
+                return Ok();
+            }
+            catch (UserNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Error on changing Email!");
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Changes the user username.
+        /// </summary>
+        /// <param name="model">The change username model.</param>
+        /// <response code="200">Successfully changed.</response>
+        /// <response code="401">Unathorized.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Something wrong!</response>
+        [Authorize]
+        [HttpPost("username")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> ChangeUserName([Required][FromBody] ChangeUserNameModel model)
+        {
+            try
+            {
+                int userId = int.Parse(User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value);
+                logger.Debug("Change UserName: {userId}", userId);
+                await dataServer.ChangeUserNameAsync(userId, model);
+                return Ok();
+            }
+            catch (UserNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Error on changing UserName!");
+                return BadRequest();
+            }
+        }
     }
 }

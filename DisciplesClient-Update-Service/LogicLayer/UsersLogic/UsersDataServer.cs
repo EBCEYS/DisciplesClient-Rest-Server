@@ -54,12 +54,12 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic
             if (user != null)
             {
                 logger.Debug("Found user {username}!", user.UserName);
-                return GenerateToken(user.UserName, user.Roles);
+                return GenerateToken(user.Id, user.UserName, user.Roles, user.Password);
             }
             throw new UserNotFoundException();
         }
 
-        private static string GenerateToken(string userName, string[] roles)
+        private static string GenerateToken(int id, string userName, string[] roles, string password)
         {
             if (string.IsNullOrEmpty(userName))
             {
@@ -69,9 +69,16 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic
             {
                 throw new Exception("Empty role list!");
             }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException($"\"{nameof(password)}\" не может быть пустым или содержать только пробел.", nameof(password));
+            }
+
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                new Claim(ClaimTypes.Hash, password)
             };
             foreach (string role in roles)
             {
@@ -132,6 +139,52 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic
         public async Task DeleteUserById(int id)
         {
             bool res = await usersDBAdapter.DeleteUserAsync(id);
+            if (!res)
+            {
+                throw new UserNotFoundException();
+            }
+        }
+        /// <summary>
+        /// Changes user password.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        /// <param name="model">The change password model.</param>
+        /// <returns>true if changed; otherwise false.</returns>
+        /// <exception cref="UserNotFoundException"></exception>
+        public async Task ChangePasswordAsync(int id, ChangePasswordModel model)
+        {
+            ChangePasswordModel hashedModel = model.CreateModelWithHashedPasswords(CreateHash);
+            bool res = await usersDBAdapter.ChangePasswordAsync(id, hashedModel);
+            if (!res)
+            {
+                throw new UserNotFoundException();
+            }
+        }
+        /// <summary>
+        /// Changes user email.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        /// <param name="model">The change email model.</param>
+        /// <returns>true if changed; otherwise false.</returns>
+        /// <exception cref="UserNotFoundException"></exception>
+        public async Task ChangeEmailAsync(int id, ChangeEmailModel model)
+        {
+            bool res = await usersDBAdapter.ChangeEmailAsync(id, model);
+            if (!res)
+            {
+                throw new UserNotFoundException();
+            }
+        }
+        /// <summary>
+        /// Changes user UserName.
+        /// </summary>
+        /// <param name="id">The user id.</param>
+        /// <param name="model">The change UserName model.</param>
+        /// <returns>true if changed; otherwise false.</returns>
+        /// <exception cref="UserNotFoundException"></exception>
+        public async Task ChangeUserNameAsync(int id, ChangeUserNameModel model)
+        {
+            bool res = await usersDBAdapter.ChangeUserNameAsync(id, model);
             if (!res)
             {
                 throw new UserNotFoundException();

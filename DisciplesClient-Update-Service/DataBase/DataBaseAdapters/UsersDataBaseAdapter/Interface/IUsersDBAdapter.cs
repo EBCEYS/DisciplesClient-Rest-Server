@@ -1,4 +1,5 @@
-﻿using Disciples2ClientDataBaseModels.DBModels;
+﻿using Disciples2ApiModels.ApiModels;
+using Disciples2ClientDataBaseModels.DBModels;
 
 namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface
 {
@@ -43,12 +44,17 @@ namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface
         /// </summary>
         /// <param name="id">The author id.</param>
         /// <returns></returns>
-        Task<Mod[]> GetAuthorsMods(int id);
+        Task<Mod[]> GetAuthorsModsAsync(int id);
         /// <summary>
         /// Gets the author's mods.
         /// </summary>
         /// <param name="name">The author's name.</param>
         /// <returns></returns>
-        Task<Mod[]> GetAuthorsMods(string name);
+        Task<Mod[]> GetAuthorsModsAsync(string name);
+        Task<bool> ChangePasswordAsync(int id, ChangePasswordModel model);
+        Task<bool> ChangeEmailAsync(int id, ChangeEmailModel model);
+        Task<bool> ChangeUserNameAsync(int id, ChangeUserNameModel model);
+        Task<bool> CheckUserExistsAsync(string username, string[] roles, string password);
+        bool CheckUserExists(string username, string[] roles, string password);
     }
 }

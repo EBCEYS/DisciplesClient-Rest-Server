@@ -3,6 +3,7 @@ using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
 using Disciples2ClientDataBaseLibrary.DataBase;
 using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapter;
 using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapter.Interfaces;
+using DisciplesClient_Update_Service.JWTExtensions;
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer;
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.Interfaces;
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter;
@@ -84,6 +85,8 @@ namespace DisciplesClient_Update_Service
 
             ConfigureServices(logger, builder);
 
+            builder.Host.UseNLog();
+
             WebApplication app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -128,7 +131,7 @@ namespace DisciplesClient_Update_Service
             builder.Services.AddSingleton(logger);
 
             builder.Services.AddScoped<IUsersDataServer, UsersDataServer>();
-            builder.Services.AddScoped<IUsersDBAdapter, UsersDBAdapter>();
+            builder.Services.AddSingleton<IUsersDBAdapter, UsersDBAdapter>();
 
             builder.Services.AddScoped<IModsDataServer, ModsDataServer>();
 
@@ -171,6 +174,8 @@ namespace DisciplesClient_Update_Service
                     IssuerSigningKey = new SymmetricSecurityKey(SecretKey),
                     RoleClaimType = ClaimTypes.Role
                 };
+                options.SecurityTokenValidators.Clear();
+                options.SecurityTokenValidators.Add(new RevokableJwtSecurityTokenHandler(builder.Services.BuildServiceProvider().GetService<IUsersDBAdapter>()));
                 options.Validate();
             });
 
