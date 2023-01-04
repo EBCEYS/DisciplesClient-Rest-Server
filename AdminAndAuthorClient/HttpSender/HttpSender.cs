@@ -1,11 +1,11 @@
 ﻿using AdminAndAuthorClient.UserDataStorage;
 using Disciples2ApiModels.ApiModels;
 using Disciples2ApiModels.D2ApiModels;
+using Disciples2ClientDataBaseModels.DBModels;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AdminAndAuthorClient.Http
 {
@@ -331,6 +331,97 @@ namespace AdminAndAuthorClient.Http
                     Name = "Error",
                     Roles = null
                 };
+            }
+        }
+
+        public User GetUserById(int id)
+        {
+            try
+            {
+                QueryBuilder qBuilder = new()
+            {
+                { "id", id.ToString() }
+            };
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/user/by-id",
+                    Query = qBuilder.ToString()
+                };
+                HttpRequestMessage msg = new(HttpMethod.Get, builder.Uri);
+                HttpResponseMessage res = client.Send(msg);
+                if (res.IsSuccessStatusCode)
+                {
+                    using Stream stream = res.Content.ReadAsStream();
+                    return JsonSerializer.Deserialize<User>(stream, Program.SerializerOptions);
+                }
+                throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+
+        public bool DeleteUserById(int id)
+        {
+            try
+            {
+                QueryBuilder qBuilder = new()
+                {
+                    { "id", id.ToString() }
+                };
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/user/by-id",
+                    Query = qBuilder.ToString()
+                };
+                HttpRequestMessage msg = new(HttpMethod.Delete, builder.Uri);
+                HttpResponseMessage res = client.Send(msg);
+                return res.IsSuccessStatusCode;
+                throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
+
+        public bool CreateUser(string userName, string password, string email, params string[] roles)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userName))
+                {
+                    throw new ArgumentException($"\"{nameof(userName)}\" не может быть неопределенным или пустым.", nameof(userName));
+                }
+
+                if (string.IsNullOrEmpty(password))
+                {
+                    throw new ArgumentException($"\"{nameof(password)}\" не может быть неопределенным или пустым.", nameof(password));
+                }
+
+                if (roles is null)
+                {
+                    throw new ArgumentNullException(nameof(roles));
+                }
+                var create = new { userName, password, email = email ?? null, roles };
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/user/create"
+                };
+                HttpRequestMessage msg = new(HttpMethod.Post, builder.Uri)
+                {
+                    Content = FormatHttpContent(create)
+                };
+                HttpResponseMessage res = client.Send(msg);
+                return res.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
             }
         }
     }

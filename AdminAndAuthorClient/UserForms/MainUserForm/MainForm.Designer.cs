@@ -40,9 +40,7 @@
             this.getUserByIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteUserByIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkTokenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uploadToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.downloadToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ModsListDataGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -52,11 +50,12 @@
             this.ModsListDataGrid.AllowUserToAddRows = false;
             this.ModsListDataGrid.AllowUserToDeleteRows = false;
             this.ModsListDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ModsListDataGrid.Location = new System.Drawing.Point(12, 27);
+            this.ModsListDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ModsListDataGrid.Location = new System.Drawing.Point(0, 24);
             this.ModsListDataGrid.Name = "ModsListDataGrid";
             this.ModsListDataGrid.ReadOnly = true;
             this.ModsListDataGrid.RowTemplate.Height = 25;
-            this.ModsListDataGrid.Size = new System.Drawing.Size(776, 150);
+            this.ModsListDataGrid.Size = new System.Drawing.Size(800, 167);
             this.ModsListDataGrid.TabIndex = 0;
             // 
             // menuStrip1
@@ -64,7 +63,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.modsToolStripMenuItem,
             this.usersToolStripMenuItem,
-            this.clientToolStripMenuItem});
+            this.infoToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -126,18 +125,21 @@
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
             this.createToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.createToolStripMenuItem.Text = "Create";
+            this.createToolStripMenuItem.Click += new System.EventHandler(this.CreateToolStripMenuItem_Click);
             // 
             // getUserByIdToolStripMenuItem
             // 
             this.getUserByIdToolStripMenuItem.Name = "getUserByIdToolStripMenuItem";
             this.getUserByIdToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.getUserByIdToolStripMenuItem.Text = "Get user by id";
+            this.getUserByIdToolStripMenuItem.Click += new System.EventHandler(this.GetUserByIdToolStripMenuItem_Click);
             // 
             // deleteUserByIdToolStripMenuItem
             // 
             this.deleteUserByIdToolStripMenuItem.Name = "deleteUserByIdToolStripMenuItem";
             this.deleteUserByIdToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.deleteUserByIdToolStripMenuItem.Text = "Delete user by id";
+            this.deleteUserByIdToolStripMenuItem.Click += new System.EventHandler(this.DeleteUserByIdToolStripMenuItem_Click);
             // 
             // checkTokenToolStripMenuItem
             // 
@@ -146,26 +148,12 @@
             this.checkTokenToolStripMenuItem.Text = "Check token";
             this.checkTokenToolStripMenuItem.Click += new System.EventHandler(this.CheckTokenToolStripMenuItem_Click);
             // 
-            // clientToolStripMenuItem
+            // infoToolStripMenuItem
             // 
-            this.clientToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.uploadToolStripMenuItem1,
-            this.downloadToolStripMenuItem1});
-            this.clientToolStripMenuItem.Name = "clientToolStripMenuItem";
-            this.clientToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
-            this.clientToolStripMenuItem.Text = "Client";
-            // 
-            // uploadToolStripMenuItem1
-            // 
-            this.uploadToolStripMenuItem1.Name = "uploadToolStripMenuItem1";
-            this.uploadToolStripMenuItem1.Size = new System.Drawing.Size(128, 22);
-            this.uploadToolStripMenuItem1.Text = "Upload";
-            // 
-            // downloadToolStripMenuItem1
-            // 
-            this.downloadToolStripMenuItem1.Name = "downloadToolStripMenuItem1";
-            this.downloadToolStripMenuItem1.Size = new System.Drawing.Size(128, 22);
-            this.downloadToolStripMenuItem1.Text = "Download";
+            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.infoToolStripMenuItem.Text = "Info";
+            this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -176,7 +164,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "Disciples 2 Admin AND Author Client";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ModsListDataGrid)).EndInit();
             this.menuStrip1.ResumeLayout(false);
@@ -199,9 +187,7 @@
         private ToolStripMenuItem getUserByIdToolStripMenuItem;
         private ToolStripMenuItem deleteUserByIdToolStripMenuItem;
         private ToolStripMenuItem checkTokenToolStripMenuItem;
-        private ToolStripMenuItem clientToolStripMenuItem;
-        private ToolStripMenuItem uploadToolStripMenuItem1;
-        private ToolStripMenuItem downloadToolStripMenuItem1;
         private ToolStripMenuItem updateModListToolStripMenuItem;
+        private ToolStripMenuItem infoToolStripMenuItem;
     }
 }

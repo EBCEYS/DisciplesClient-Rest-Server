@@ -95,7 +95,7 @@ public class UsersDBAdapter : IUsersDBAdapter
         }
         catch (Exception ex)
         {
-            logger.Error(ex, "Error on creating new user!");
+            logger.Error(ex, "Error on deleting new user!");
             return false;
         }
     }

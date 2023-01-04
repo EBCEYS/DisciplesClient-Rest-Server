@@ -5,6 +5,11 @@
     /// </summary>
     public interface IModsFSAdapter
     {
+        /// <summary>
+        /// Gets the last mod file.
+        /// </summary>
+        /// <param name="modName"></param>
+        /// <returns></returns>
         Task<FileInfo> GetLastModFileAsync(string modName);
 
         /// <summary>
@@ -14,6 +19,11 @@
         /// <param name="fileName">The file name.</param>
         /// <returns></returns>
         Task<Stream> GetModFileAsync(string modName, string fileName);
+        /// <summary>
+        /// Gets mod files.
+        /// </summary>
+        /// <param name="modName"></param>
+        /// <returns></returns>
         Task<string[]> GetModFilesAsync(string modName);
 
         /// <summary>

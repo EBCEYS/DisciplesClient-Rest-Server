@@ -1,5 +1,7 @@
 ﻿using AdminAndAuthorClient.UserDataStorage;
+using AdminAndAuthorClient.UserForms.ByIdForms;
 using AdminAndAuthorClient.UserForms.ModsForms;
+using AdminAndAuthorClient.UserForms.UserCreationForms;
 using Disciples2ApiModels.ApiModels;
 using Disciples2ApiModels.D2ApiModels;
 
@@ -127,6 +129,30 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
             AuthorizedInfo result = Program.HttpSender.CheckAuthorized();
             string roles = result.Roles != null ? string.Join(Environment.NewLine, result.Roles) : "ERROR";
             MessageBox.Show($"UserName: {result.Name}{Environment.NewLine}Roles: {roles}", "Authorization info");
+        }
+
+        private void GetUserByIdToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProcessUserByIdForm form = new(OperationByUserId.Get);
+            form.ShowDialog();
+        }
+
+        private void DeleteUserByIdToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProcessUserByIdForm form = new(OperationByUserId.Delete);
+            form.ShowDialog();
+        }
+
+        private void CreateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UserCreationForm form = new();
+            form.ShowDialog();
+        }
+
+        private void InfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string info = $"If you have a questions about system you can go to github{Environment.NewLine}{Program.GitHub}{Environment.NewLine}or msg me to discord{Environment.NewLine}{Program.Discord}!";
+            MessageBox.Show(info, "Info");
         }
     }
 }

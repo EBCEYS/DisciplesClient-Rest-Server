@@ -1,6 +1,4 @@
-﻿using AdminAndAuthorClient.Http;
-
-namespace AdminAndAuthorClient.UserForms.ModsForms
+﻿namespace AdminAndAuthorClient.UserForms.ModsForms
 {
     public partial class FilesForm : Form
     {

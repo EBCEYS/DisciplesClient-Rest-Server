@@ -15,6 +15,18 @@ namespace AdminAndAuthorClient.UserDataStorage
             }
         }
 
+        public static void CheckGamesExists()
+        {
+            foreach (KeyValuePair<string, string> mod in ModsInfo)
+            {
+                if (!Directory.Exists(mod.Value))
+                {
+                    ModsInfo.TryRemove(mod.Key, out _);
+                    SaveGamesDirectories();
+                }
+            }
+        }
+
         public static void SaveGamesDirectories()
         {
             try

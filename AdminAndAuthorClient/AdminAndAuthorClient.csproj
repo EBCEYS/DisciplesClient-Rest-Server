@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Disciples2ApiModels\Disciples2ApiModels.csproj" />
+    <ProjectReference Include="..\Disciples2ClientDataBaseLibrary\Disciples2ClientDataBaseModels.csproj" />
   </ItemGroup>
 
 </Project>

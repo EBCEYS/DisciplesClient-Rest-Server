@@ -68,5 +68,8 @@ namespace AdminAndAuthorClient
         public static string BasePath => AppDomain.CurrentDomain.BaseDirectory;
 
         public static Uri Url { get; private set; }
+
+        public static string GitHub { get; } = "https://github.com/EBCEYS/DisciplesClient-Rest-Server";
+        public static string Discord { get; } = "nolimit_Evsey#3704";
     }
 }
