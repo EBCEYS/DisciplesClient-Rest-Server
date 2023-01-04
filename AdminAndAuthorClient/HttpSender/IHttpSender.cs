@@ -1,4 +1,5 @@
-﻿using Disciples2ApiModels.ApiModels;
+﻿using AdminAndAuthorClient.UserForms.ChangeForms;
+using Disciples2ApiModels.ApiModels;
 using Disciples2ApiModels.D2ApiModels;
 using Disciples2ClientDataBaseModels.DBModels;
 
@@ -6,6 +7,12 @@ namespace AdminAndAuthorClient.Http
 {
     public interface IHttpSender
     {
+        event Action UnAuthorizedError;
+
+        bool ChangeEmail(ChangeEmailModel model);
+        bool ChangePassword(ChangePasswordModel model);
+        bool ChangeRequest(ChangeTypes type, object data);
+        bool ChangeUserName(ChangeUserNameModel model);
         AuthorizedInfo CheckAuthorized();
         bool CreateUser(string userName, string password, string email, params string[] roles);
         void DeleteModFile(string modName, string fileName);

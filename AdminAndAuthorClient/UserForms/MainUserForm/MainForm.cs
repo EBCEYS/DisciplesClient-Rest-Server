@@ -1,5 +1,6 @@
 ﻿using AdminAndAuthorClient.UserDataStorage;
 using AdminAndAuthorClient.UserForms.ByIdForms;
+using AdminAndAuthorClient.UserForms.ChangeForms;
 using AdminAndAuthorClient.UserForms.ModsForms;
 using AdminAndAuthorClient.UserForms.UserCreationForms;
 using Disciples2ApiModels.ApiModels;
@@ -13,20 +14,26 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
         public MainForm()
         {
             InitializeComponent();
+            Program.HttpSender.UnAuthorizedError += LoginForm;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             if (!UserStorage.IsParamsSet())
             {
-                LoginForm loginForm = new();
-                loginForm.ShowDialog();
-                if (!UserStorage.IsParamsSet())
-                {
-                    this.Close();
-                }
+                LoginForm();
             }
             UpdateModsDataGrid();
+        }
+
+        private void LoginForm()
+        {
+            LoginForm loginForm = new();
+            loginForm.ShowDialog();
+            if (!UserStorage.IsParamsSet())
+            {
+                this.Close();
+            }
         }
 
         private void UpdateModsDataGrid()
@@ -153,6 +160,31 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
         {
             string info = $"If you have a questions about system you can go to github{Environment.NewLine}{Program.GitHub}{Environment.NewLine}or msg me to discord{Environment.NewLine}{Program.Discord}!";
             MessageBox.Show(info, "Info");
+        }
+
+        private void UserNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeForm form = new(ChangeTypes.username);
+            form.ShowDialog();
+        }
+
+        private void PasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeForm form = new(ChangeTypes.password);
+            form.ShowDialog();
+        }
+
+        private void EmailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeForm form = new(ChangeTypes.email);
+            MessageBox.Show("If you haven't entered the email on registration, stay current field empty,", "Info", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            form.ShowDialog();
+        }
+
+        private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoginForm loginForm = new();
+            loginForm.ShowDialog();
         }
     }
 }

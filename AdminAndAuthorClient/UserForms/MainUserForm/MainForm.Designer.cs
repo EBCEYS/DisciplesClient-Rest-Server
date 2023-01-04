@@ -40,7 +40,12 @@
             this.getUserByIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteUserByIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkTokenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.userNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.passwordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.emailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ModsListDataGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +68,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.modsToolStripMenuItem,
             this.usersToolStripMenuItem,
-            this.infoToolStripMenuItem});
+            this.infoToolStripMenuItem,
+            this.logoutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -115,7 +121,8 @@
             this.createToolStripMenuItem,
             this.getUserByIdToolStripMenuItem,
             this.deleteUserByIdToolStripMenuItem,
-            this.checkTokenToolStripMenuItem});
+            this.checkTokenToolStripMenuItem,
+            this.changeToolStripMenuItem});
             this.usersToolStripMenuItem.Name = "usersToolStripMenuItem";
             this.usersToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.usersToolStripMenuItem.Text = "Users";
@@ -123,30 +130,61 @@
             // createToolStripMenuItem
             // 
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createToolStripMenuItem.Text = "Create";
             this.createToolStripMenuItem.Click += new System.EventHandler(this.CreateToolStripMenuItem_Click);
             // 
             // getUserByIdToolStripMenuItem
             // 
             this.getUserByIdToolStripMenuItem.Name = "getUserByIdToolStripMenuItem";
-            this.getUserByIdToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.getUserByIdToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.getUserByIdToolStripMenuItem.Text = "Get user by id";
             this.getUserByIdToolStripMenuItem.Click += new System.EventHandler(this.GetUserByIdToolStripMenuItem_Click);
             // 
             // deleteUserByIdToolStripMenuItem
             // 
             this.deleteUserByIdToolStripMenuItem.Name = "deleteUserByIdToolStripMenuItem";
-            this.deleteUserByIdToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.deleteUserByIdToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteUserByIdToolStripMenuItem.Text = "Delete user by id";
             this.deleteUserByIdToolStripMenuItem.Click += new System.EventHandler(this.DeleteUserByIdToolStripMenuItem_Click);
             // 
             // checkTokenToolStripMenuItem
             // 
             this.checkTokenToolStripMenuItem.Name = "checkTokenToolStripMenuItem";
-            this.checkTokenToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.checkTokenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.checkTokenToolStripMenuItem.Text = "Check token";
             this.checkTokenToolStripMenuItem.Click += new System.EventHandler(this.CheckTokenToolStripMenuItem_Click);
+            // 
+            // changeToolStripMenuItem
+            // 
+            this.changeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.userNameToolStripMenuItem,
+            this.passwordToolStripMenuItem,
+            this.emailToolStripMenuItem});
+            this.changeToolStripMenuItem.Name = "changeToolStripMenuItem";
+            this.changeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.changeToolStripMenuItem.Text = "Change";
+            // 
+            // userNameToolStripMenuItem
+            // 
+            this.userNameToolStripMenuItem.Name = "userNameToolStripMenuItem";
+            this.userNameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.userNameToolStripMenuItem.Text = "UserName";
+            this.userNameToolStripMenuItem.Click += new System.EventHandler(this.UserNameToolStripMenuItem_Click);
+            // 
+            // passwordToolStripMenuItem
+            // 
+            this.passwordToolStripMenuItem.Name = "passwordToolStripMenuItem";
+            this.passwordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.passwordToolStripMenuItem.Text = "Password";
+            this.passwordToolStripMenuItem.Click += new System.EventHandler(this.PasswordToolStripMenuItem_Click);
+            // 
+            // emailToolStripMenuItem
+            // 
+            this.emailToolStripMenuItem.Name = "emailToolStripMenuItem";
+            this.emailToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.emailToolStripMenuItem.Text = "Email";
+            this.emailToolStripMenuItem.Click += new System.EventHandler(this.EmailToolStripMenuItem_Click);
             // 
             // infoToolStripMenuItem
             // 
@@ -154,6 +192,13 @@
             this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.infoToolStripMenuItem.Text = "Info";
             this.infoToolStripMenuItem.Click += new System.EventHandler(this.InfoToolStripMenuItem_Click);
+            // 
+            // logoutToolStripMenuItem
+            // 
+            this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.logoutToolStripMenuItem.Text = "Logout";
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.LogoutToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -189,5 +234,10 @@
         private ToolStripMenuItem checkTokenToolStripMenuItem;
         private ToolStripMenuItem updateModListToolStripMenuItem;
         private ToolStripMenuItem infoToolStripMenuItem;
+        private ToolStripMenuItem changeToolStripMenuItem;
+        private ToolStripMenuItem userNameToolStripMenuItem;
+        private ToolStripMenuItem passwordToolStripMenuItem;
+        private ToolStripMenuItem emailToolStripMenuItem;
+        private ToolStripMenuItem logoutToolStripMenuItem;
     }
 }

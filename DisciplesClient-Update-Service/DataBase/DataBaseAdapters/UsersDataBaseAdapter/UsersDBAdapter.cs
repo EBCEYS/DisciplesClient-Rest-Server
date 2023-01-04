@@ -109,9 +109,16 @@ public class UsersDBAdapter : IUsersDBAdapter
         try
         {
             await using Disciples2ClientDBConnext db = new();
-            await db.AddAsync(user);
-            await db.SaveChangesAsync();
-            return true;
+            if ((await db.Users.FirstOrDefaultAsync(u => u.UserName == user.UserName)) == null)
+            {
+                await db.AddAsync(user);
+                await db.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         catch(Exception ex)
         {

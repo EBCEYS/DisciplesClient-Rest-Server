@@ -1,4 +1,5 @@
 ﻿using AdminAndAuthorClient.UserDataStorage;
+using AdminAndAuthorClient.UserForms.ChangeForms;
 using Disciples2ApiModels.ApiModels;
 using Disciples2ApiModels.D2ApiModels;
 using Disciples2ClientDataBaseModels.DBModels;
@@ -12,12 +13,21 @@ namespace AdminAndAuthorClient.Http
     public class HttpSender : IHttpSender
     {
         private readonly HttpClient client;
+
+        public event Action UnAuthorizedError;
+
+        private void CheckUnathorized(HttpResponseMessage res)
+        {
+            if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                UnAuthorizedError!.Invoke();
+            }
+        }
+
         public void SetToken(string token)
         {
-            if (!client.DefaultRequestHeaders.Contains("Authorization"))
-            {
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-            }
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }
         public HttpSender(HttpClient httpClient = null)
         {
@@ -50,6 +60,7 @@ namespace AdminAndAuthorClient.Http
                     string token = await res.Content.ReadAsStringAsync();
                     return token;
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch (Exception ex)
@@ -83,6 +94,7 @@ namespace AdminAndAuthorClient.Http
                     string token = reader.ReadToEnd();
                     return token;
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch (Exception ex)
@@ -131,6 +143,7 @@ namespace AdminAndAuthorClient.Http
                     string json = reader.ReadToEnd();
                     return JsonSerializer.Deserialize<ModInfo[]>(json, Program.SerializerOptions);
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch(Exception ex)
@@ -161,6 +174,7 @@ namespace AdminAndAuthorClient.Http
                     string json = reader.ReadToEnd();
                     return JsonSerializer.Deserialize<string[]>(json, Program.SerializerOptions);
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch(Exception ex)
@@ -191,6 +205,7 @@ namespace AdminAndAuthorClient.Http
                     MessageBox.Show("Delete mod file successfuly!");
                     return;
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch (Exception ex)
@@ -221,6 +236,7 @@ namespace AdminAndAuthorClient.Http
                     MessageBox.Show("Mod file will be deleted!");
                     return;
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch (Exception ex)
@@ -257,6 +273,7 @@ namespace AdminAndAuthorClient.Http
                     MessageBox.Show($"Upload mod {modName} successfuly!");
                     return;
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch(Exception ex)
@@ -296,6 +313,7 @@ namespace AdminAndAuthorClient.Http
                     MessageBox.Show($"Successfuly download mod {modName}!");
                     return;
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch(Exception ex)
@@ -321,6 +339,7 @@ namespace AdminAndAuthorClient.Http
                     string json = reader.ReadToEnd();
                     return JsonSerializer.Deserialize<AuthorizedInfo>(json, Program.SerializerOptions);
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch (Exception ex)
@@ -354,6 +373,7 @@ namespace AdminAndAuthorClient.Http
                     using Stream stream = res.Content.ReadAsStream();
                     return JsonSerializer.Deserialize<User>(stream, Program.SerializerOptions);
                 }
+                CheckUnathorized(res);
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
             catch(Exception ex)
@@ -378,6 +398,7 @@ namespace AdminAndAuthorClient.Http
                 };
                 HttpRequestMessage msg = new(HttpMethod.Delete, builder.Uri);
                 HttpResponseMessage res = client.Send(msg);
+                CheckUnathorized(res);
                 return res.IsSuccessStatusCode;
                 throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
             }
@@ -416,6 +437,7 @@ namespace AdminAndAuthorClient.Http
                     Content = FormatHttpContent(create)
                 };
                 HttpResponseMessage res = client.Send(msg);
+                CheckUnathorized(res);
                 return res.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -423,6 +445,90 @@ namespace AdminAndAuthorClient.Http
                 MessageBox.Show(ex.Message);
                 return false;
             }
+        }
+
+        public bool ChangePassword(ChangePasswordModel model)
+        {
+            try
+            {
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/user/change/password"
+                };
+                HttpRequestMessage msg = new(HttpMethod.Post, builder.Uri)
+                {
+                    Content = FormatHttpContent(model)
+                };
+                HttpResponseMessage res = client.Send(msg);
+                CheckUnathorized(res);
+                return res.IsSuccessStatusCode;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
+        public bool ChangeEmail(ChangeEmailModel model)
+        {
+            try
+            {
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/user/change/email"
+                };
+                HttpRequestMessage msg = new(HttpMethod.Post, builder.Uri)
+                {
+                    Content = FormatHttpContent(model)
+                };
+                HttpResponseMessage res = client.Send(msg);
+                CheckUnathorized(res);
+                return res.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
+        public bool ChangeUserName(ChangeUserNameModel model)
+        {
+            try
+            {
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/user/change/username"
+                };
+                HttpRequestMessage msg = new(HttpMethod.Post, builder.Uri)
+                {
+                    Content = FormatHttpContent(model)
+                };
+                HttpResponseMessage res = client.Send(msg);
+                CheckUnathorized(res);
+                return res.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
+
+        public bool ChangeRequest(ChangeTypes type, object data)
+        {
+            if (type == ChangeTypes.password)
+            {
+                return ChangePassword((ChangePasswordModel)data);
+            }
+            else if (type == ChangeTypes.email)
+            {
+                return ChangeEmail((ChangeEmailModel)data);
+            }
+            else if (type == ChangeTypes.username)
+            {
+                return ChangeUserName((ChangeUserNameModel)data);
+            }
+            throw new NotImplementedException($"Unsupported type: {type}!");
         }
     }
 }

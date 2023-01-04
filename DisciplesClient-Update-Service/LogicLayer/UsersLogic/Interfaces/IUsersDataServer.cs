@@ -8,8 +8,26 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces
     /// </summary>
     public interface IUsersDataServer
     {
+        /// <summary>
+        /// Changes email.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task ChangeEmailAsync(int id, ChangeEmailModel model);
+        /// <summary>
+        /// Changes password.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task ChangePasswordAsync(int id, ChangePasswordModel model);
+        /// <summary>
+        /// Changes username.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task ChangeUserNameAsync(int id, ChangeUserNameModel model);
 
         /// <summary>

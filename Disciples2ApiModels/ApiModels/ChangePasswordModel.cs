@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Security;
 
 namespace Disciples2ApiModels.ApiModels
 {

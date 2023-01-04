@@ -34,7 +34,7 @@ namespace AdminAndAuthorClient
                 LoginTextBox.Enabled = false;
                 PasswordTextBox.Enabled = false;
                 UserStorage.SetUserInfo(userName, password, token);
-                MessageBox.Show($"Logined successfuly!{Environment.NewLine}{token}");
+                MessageBox.Show($"Logined successfuly!");
                 Program.HttpSender.SetToken(token);
                 this.Close();
             }

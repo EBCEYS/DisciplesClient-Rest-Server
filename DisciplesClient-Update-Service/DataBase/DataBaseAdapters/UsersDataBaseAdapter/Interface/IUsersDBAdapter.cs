@@ -51,10 +51,42 @@ namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface
         /// <param name="name">The author's name.</param>
         /// <returns></returns>
         Task<Mod[]> GetAuthorsModsAsync(string name);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task<bool> ChangePasswordAsync(int id, ChangePasswordModel model);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task<bool> ChangeEmailAsync(int id, ChangeEmailModel model);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task<bool> ChangeUserNameAsync(int id, ChangeUserNameModel model);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="roles"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         Task<bool> CheckUserExistsAsync(string username, string[] roles, string password);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="roles"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         bool CheckUserExists(string username, string[] roles, string password);
     }
 }
