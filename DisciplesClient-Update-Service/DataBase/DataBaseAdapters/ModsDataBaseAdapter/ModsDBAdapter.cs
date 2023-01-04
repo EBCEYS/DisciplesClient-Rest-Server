@@ -185,5 +185,26 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
                 return false;
             }
         }
+        /// <summary>
+        /// Updates mod file name.
+        /// </summary>
+        /// <param name="modName">The mod name.</param>
+        /// <param name="newFile">The new file name.</param>
+        /// <returns>true if success; otherwise false.</returns>
+        public async Task<bool> UpdateModFileAsync(string modName, string newFile)
+        {
+            try
+            {
+                await using Disciples2ClientDBConnext db = new();
+                (await db.Mods.FirstOrDefaultAsync(mod => mod.Name == modName)).FileName = newFile;
+                await db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Error on removing mod!");
+                return false;
+            }
+        }
     }
 }

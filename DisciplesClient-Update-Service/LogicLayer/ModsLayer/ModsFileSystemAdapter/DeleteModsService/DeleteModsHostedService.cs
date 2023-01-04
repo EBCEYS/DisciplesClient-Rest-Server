@@ -50,7 +50,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
             }
             await Task.Run(() =>
             {
-                deleteFileTimer = new(RemovingModsProcess, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+                deleteFileTimer = new(RemovingModsProcess, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
             }, cancellationToken);
         }
         /// <summary>

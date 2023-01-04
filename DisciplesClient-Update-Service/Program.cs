@@ -8,6 +8,7 @@ using DisciplesClient_Update_Service.LogicLayer.ModsLayer.Interfaces;
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter;
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.DeleteModsService;
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.Interfaces;
+using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.UpdateModsService;
 using DisciplesClient_Update_Service.LogicLayer.UsersLogic;
 using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -130,11 +131,13 @@ namespace DisciplesClient_Update_Service
             builder.Services.AddScoped<IUsersDBAdapter, UsersDBAdapter>();
 
             builder.Services.AddScoped<IModsDataServer, ModsDataServer>();
-            builder.Services.AddScoped<IModsFSAdapter, ModsFSAdapter>();
-            builder.Services.AddScoped<IModsDBAdapter, ModsDBAdapter>();
+
+            builder.Services.AddSingleton<IModsFSAdapter, ModsFSAdapter>();
+            builder.Services.AddSingleton<IModsDBAdapter, ModsDBAdapter>();
 
             builder.Services.AddSingleton<ConcurrentQueue<string>>();
             builder.Services.AddHostedService<DeleteModsHostedService>();
+            builder.Services.AddHostedService<UpdateModsHostedService>();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {

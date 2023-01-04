@@ -5,6 +5,8 @@
     /// </summary>
     public interface IModsFSAdapter
     {
+        Task<FileInfo> GetLastModFileAsync(string modName);
+
         /// <summary>
         /// Gets the mod file.
         /// </summary>

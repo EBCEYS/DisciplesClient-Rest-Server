@@ -55,5 +55,6 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// <param name="updateTime">The update time.</param>
         /// <returns></returns>
         Task<bool> UpdateModAsync(string modName, string fileName, string version, DateTimeOffset? updateTime = null);
+        Task<bool> UpdateModFileAsync(string modName, string newFile);
     }
 }

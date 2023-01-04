@@ -2,6 +2,7 @@
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.Interfaces;
 using NLog;
 using System.Collections.Concurrent;
+using System.Globalization;
 
 namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter
 {
@@ -116,6 +117,35 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
                     return Directory.GetFiles(path, "*.zip").Select(str => Path.GetFileName(str)).ToArray();
                 }
                 catch(Exception ex)
+                {
+                    logger.Error(ex, "Error on geting mod files!");
+                    return null;
+                }
+            });
+        }
+        /// <summary>
+        /// Gets the last mod file.
+        /// </summary>
+        /// <param name="modName">The mod name.</param>
+        /// <returns><see cref="FileInfo"/> if exists; otherwise null.</returns>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        public async Task<FileInfo> GetLastModFileAsync(string modName)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    DirectoryInfo dirInfo = new(Path.Combine(BaseModsPath, modName));
+                    if (!dirInfo.Exists)
+                    {
+                        throw new DirectoryNotFoundException(dirInfo.FullName);
+                    }
+                    return dirInfo.GetFiles()
+                    .Where(file => file.Exists && file.Extension.Contains(".zip"))
+                    .OrderByDescending(f => f.LastWriteTimeUtc).
+                    FirstOrDefault();
+                }
+                catch (Exception ex)
                 {
                     logger.Error(ex, "Error on geting mod files!");
                     return null;

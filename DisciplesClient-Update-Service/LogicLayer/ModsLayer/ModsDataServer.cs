@@ -179,14 +179,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
                 {
                     return false;
                 }
-                bool removeFromFSResult = modsfsAdapter.RemoveMode(modName, fileName);
-                string[] modFiles = await modsfsAdapter.GetModFilesAsync(modName);
-                if (removeFromFSResult && modFiles.Length <= 0)
-                {
-                    bool removeFromDBResult = await modsDBAdapter.RemoveModAsync(mod);
-                    return removeFromDBResult && removeFromFSResult;
-                }//TODO: сделать нормальное удаление из базы, а то сейчас какое-то говно получается.
-                return removeFromFSResult;
+                return modsfsAdapter.RemoveMode(modName, fileName);
             }
             catch(Exception ex)
             {
