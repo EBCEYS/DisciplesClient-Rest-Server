@@ -23,6 +23,7 @@
 ![ERD](https://github.com/EBCEYS/DisciplesClient-Rest-Server/blob/main/BD_ERD.png)
 
 Свагер выложен в формате pdf.
+![swagger](https://github.com/EBCEYS/DisciplesClient-Rest-Server/blob/main/Swagger%20UI.pdf)
 ### Пользователи
 Токен с бесконечным жизненным циклом (может потом поменяю), но по идее, обычным пользователям не нужно будет логиниться.
 
