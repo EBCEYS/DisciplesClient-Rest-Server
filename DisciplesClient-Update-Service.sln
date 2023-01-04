@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisciplesClient-Update-Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Disciples2ApiModels", "Disciples2ApiModels\Disciples2ApiModels.csproj", "{67C31DB4-C7D7-47E6-9956-8BD4DA19AC77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disciples2ClientDataBaseModels", "Disciples2ClientDataBaseLibrary\Disciples2ClientDataBaseModels.csproj", "{ED5C06FC-0164-4F45-AE87-C0842C7A4951}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Disciples2ClientDataBaseModels", "Disciples2ClientDataBaseLibrary\Disciples2ClientDataBaseModels.csproj", "{ED5C06FC-0164-4F45-AE87-C0842C7A4951}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisciplesClient-Update-ServiceTests", "DisciplesClient-Update-ServiceTests\DisciplesClient-Update-ServiceTests.csproj", "{D4A09F7F-22E7-4A55-91B1-464CF87615FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisciplesClient-Update-ServiceTests", "DisciplesClient-Update-ServiceTests\DisciplesClient-Update-ServiceTests.csproj", "{D4A09F7F-22E7-4A55-91B1-464CF87615FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminAndAuthorClient", "AdminAndAuthorClient\AdminAndAuthorClient.csproj", "{A00696E7-1336-47C2-8F9D-E618EA6B2485}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,8 @@ Global
 		{6A0FFF61-672A-4F49-9C4D-9E2D6A721C89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A0FFF61-672A-4F49-9C4D-9E2D6A721C89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A0FFF61-672A-4F49-9C4D-9E2D6A721C89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67C31DB4-C7D7-47E6-9956-8BD4DA19AC77}.Debug|Any CPU.ActiveCfg = Release|Any CPU
-		{67C31DB4-C7D7-47E6-9956-8BD4DA19AC77}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{67C31DB4-C7D7-47E6-9956-8BD4DA19AC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C31DB4-C7D7-47E6-9956-8BD4DA19AC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67C31DB4-C7D7-47E6-9956-8BD4DA19AC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67C31DB4-C7D7-47E6-9956-8BD4DA19AC77}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED5C06FC-0164-4F45-AE87-C0842C7A4951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D4A09F7F-22E7-4A55-91B1-464CF87615FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4A09F7F-22E7-4A55-91B1-464CF87615FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4A09F7F-22E7-4A55-91B1-464CF87615FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A00696E7-1336-47C2-8F9D-E618EA6B2485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A00696E7-1336-47C2-8F9D-E618EA6B2485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A00696E7-1336-47C2-8F9D-E618EA6B2485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A00696E7-1336-47C2-8F9D-E618EA6B2485}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

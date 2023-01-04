@@ -18,6 +18,7 @@ using NLog.Web;
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DisciplesClient_Update_Service
@@ -139,7 +140,7 @@ namespace DisciplesClient_Update_Service
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.WriteIndented = false;
-                options.JsonSerializerOptions.ReadCommentHandling = System.Text.Json.JsonCommentHandling.Skip;
+                options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
                 options.JsonSerializerOptions.AllowTrailingCommas = true;
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             }); ;

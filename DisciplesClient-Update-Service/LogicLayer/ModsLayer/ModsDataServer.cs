@@ -73,7 +73,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
             {
                 if (updateDateTime == null)
                 {
-                    updateDateTime = DateTimeOffset.Now;
+                    updateDateTime = DateTimeOffset.UtcNow;
                 }
                 User author = await usersDBAdapter.GetUserByUserNameAsync(authorName) ?? throw new UserNotFoundException();
                 Mod modDB = await modsDBAdapter.GetModByAuthorAsync(modName, author.Id);
@@ -91,8 +91,8 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
                             //Author = author,
                             Name = modName,
                             Version = version,
-                            FirstUpdateDateTime = DateTime.Now,
-                            LastUpdateDateTime = DateTime.Now,
+                            FirstUpdateDateTime = DateTimeOffset.UtcNow,
+                            LastUpdateDateTime = DateTimeOffset.UtcNow,
                             FileName = mod.FileName
                         };
                         return await modsDBAdapter.CreateModAsync(modDB);
@@ -180,11 +180,12 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
                     return false;
                 }
                 bool removeFromFSResult = modsfsAdapter.RemoveMode(modName, fileName);
-                if (removeFromFSResult && mod.FileName == fileName)
+                string[] modFiles = await modsfsAdapter.GetModFilesAsync(modName);
+                if (removeFromFSResult && modFiles.Length <= 0)
                 {
                     bool removeFromDBResult = await modsDBAdapter.RemoveModAsync(mod);
                     return removeFromDBResult && removeFromFSResult;
-                }
+                }//TODO: сделать нормальное удаление из базы, а то сейчас какое-то говно получается.
                 return removeFromFSResult;
             }
             catch(Exception ex)

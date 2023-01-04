@@ -122,14 +122,14 @@ namespace DisciplesClient_Update_Service.Controllers
             }
         }
         /// <summary>
-        /// Remove the mod file. If file name == last file name mod will be removed from data base.
+        /// Remove the mod file.
         /// </summary>
         /// <param name="modName"></param>
         /// <param name="fileName"></param>
         /// <response code="200">Removed.</response>
         /// <response code="404">File not found.</response>
         /// <response code="500">Something wrong!</response>
-        [HttpDelete("mod/remove")]
+        [HttpDelete("mod/file")]
         [Authorize(Roles = "adm, admin, administrator")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
