@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore DisciplesClient-Update-Service
     - name: Build
-      run: dotnet build DisciplesClient-Update-Service --no-restore --runtime linux-x64
+      run: dotnet build DisciplesClient-Update-Service --no-restore
     - name: Test
       run: dotnet test DisciplesClient-Update-ServiceTests --no-build --verbosity normal
