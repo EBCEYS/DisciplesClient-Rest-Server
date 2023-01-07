@@ -18,6 +18,7 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using System.Collections.Concurrent;
+using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
@@ -67,16 +68,19 @@ namespace DisciplesClient_Update_Service
         /// <param name="args">The args.</param>
         public static void Main(string[] args)
         {
-            BasePath = AppDomain.CurrentDomain.BaseDirectory;
+            BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string pth = Path.Combine(BasePath, "nlog.config");
             Logger logger = NLogBuilder.ConfigureNLog(pth).GetCurrentClassLogger();
             LogManager.Configuration.Variables["logDir"] = BasePath;
 
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder();
             ConfigurationManager config = builder.Configuration;
 
-            D2DBConnectionString = config.GetConnectionString("D2DBConnection") ?? throw new Exception("Can not find connection string 'D2DBConnection'!");
-            
+            logger.Info("Base path is {basePath}", BasePath);
+
+            D2DBConnectionString = config.GetConnectionString("D2DBConnection") ?? throw new Exception($"Can not find connection string 'D2DBConnection'!\nBasePath:{BasePath}");
+            ConfigureHttps(builder, config);
+
             //Configure the directories.
             ConfigurePaths(config);
 
@@ -86,11 +90,25 @@ namespace DisciplesClient_Update_Service
             ConfigureServices(logger, builder);
 
             builder.Host.UseNLog();
+            builder.Logging.AddNLogWeb();
 
             WebApplication app = builder.Build();
 
             // Configure the HTTP request pipeline.
             ConfigureApp(app);
+        }
+
+        private static void ConfigureHttps(WebApplicationBuilder builder, IConfiguration config)
+        {
+            string sertName = config.GetValue<string>("CertName") ?? throw new Exception("Can not load 'CertName'!");
+            string sertPass = File.ReadAllText(Path.Combine(BasePath, "certpass.key")) ?? throw new FileNotFoundException("Can not read certpass!");
+            builder.WebHost.UseKestrel(options =>
+            {
+                options.Listen(IPAddress.Loopback, 443, listenOptions =>
+                {
+                    listenOptions.UseHttps(sertName, sertPass);
+                });
+            });
         }
 
         private static void ConfigurePaths(ConfigurationManager config)
@@ -224,6 +242,8 @@ namespace DisciplesClient_Update_Service
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

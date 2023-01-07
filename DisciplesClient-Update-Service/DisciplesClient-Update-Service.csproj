@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -11,10 +11,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="certpass.key" />
     <None Remove="secret.key" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="certpass.key">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="secret.key">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

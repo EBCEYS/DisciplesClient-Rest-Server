@@ -10,7 +10,8 @@
     "Issuer": "THE_EBCEY",
     "Audience": "THE_EBCEY"
   },
-  "RemoveQueueFilePath": "removequeue.json" // имя файла, в котором будет хранится очередь запросов на удаление файла мода
+  "RemoveQueueFilePath": "removequeue.json", // имя файла, в котором будет хранится очередь запросов на удаление файла мода
+  "CertName": "cert.pfx" // имя сертификата
 }
 ```
 ## Планы
