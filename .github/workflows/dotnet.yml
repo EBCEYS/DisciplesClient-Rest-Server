@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore DisciplesClient-Update-Service
     - name: Build
-      run: dotnet build DisciplesClient-Update-Service --no-restore --runtime ubuntu
+      run: dotnet build DisciplesClient-Update-Service --no-restore --runtime linux-x64
     - name: Test
       run: dotnet test DisciplesClient-Update-ServiceTests --no-build --verbosity normal
