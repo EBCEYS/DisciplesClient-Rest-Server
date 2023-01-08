@@ -11,14 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="certpass.key" />
     <None Remove="secret.key" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="certpass.key">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="secret.key">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

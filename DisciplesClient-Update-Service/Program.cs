@@ -68,18 +68,24 @@ namespace DisciplesClient_Update_Service
         /// <param name="args">The args.</param>
         public static void Main(string[] args)
         {
-            BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder();
+            //BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            BasePath = builder.Environment.ContentRootPath;
+            builder.Host.UseContentRoot(Directory.GetCurrentDirectory());
+            builder.Configuration.SetBasePath(BasePath);
             string pth = Path.Combine(BasePath, "nlog.config");
             Logger logger = NLogBuilder.ConfigureNLog(pth).GetCurrentClassLogger();
             LogManager.Configuration.Variables["logDir"] = BasePath;
-
-            WebApplicationBuilder builder = WebApplication.CreateBuilder();
             ConfigurationManager config = builder.Configuration;
 
             logger.Info("Base path is {basePath}", BasePath);
 
             D2DBConnectionString = config.GetConnectionString("D2DBConnection") ?? throw new Exception($"Can not find connection string 'D2DBConnection'!\nBasePath:{BasePath}");
-            ConfigureHttps(builder, config);
+
+            builder.WebHost.UseKestrel(opt =>
+            {
+                opt.ListenAnyIP(5000);
+            });
 
             //Configure the directories.
             ConfigurePaths(config);
@@ -96,19 +102,6 @@ namespace DisciplesClient_Update_Service
 
             // Configure the HTTP request pipeline.
             ConfigureApp(app);
-        }
-
-        private static void ConfigureHttps(WebApplicationBuilder builder, IConfiguration config)
-        {
-            string sertName = config.GetValue<string>("CertName") ?? throw new Exception("Can not load 'CertName'!");
-            string sertPass = File.ReadAllText(Path.Combine(BasePath, "certpass.key")) ?? throw new FileNotFoundException("Can not read certpass!");
-            builder.WebHost.UseKestrel(options =>
-            {
-                options.Listen(IPAddress.Loopback, 443, listenOptions =>
-                {
-                    listenOptions.UseHttps(sertName, sertPass);
-                });
-            });
         }
 
         private static void ConfigurePaths(ConfigurationManager config)
@@ -243,7 +236,7 @@ namespace DisciplesClient_Update_Service
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
