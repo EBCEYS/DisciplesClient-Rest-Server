@@ -55,6 +55,10 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
             Task.Run(async () =>
             {
                 Mod[] mods = await dbAdapter.GetModsListAsync();
+                if (mods == null)
+                {
+                    return;
+                }
                 foreach (Mod mod in mods)
                 {
                     try
@@ -73,6 +77,10 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
         private async Task ProcessMod(Mod mod)
         {
             string[] files = await fsAdapter.GetModFilesAsync(mod.Name);
+            if (files == null)
+            {
+                return;
+            }
             if (!files.Contains(mod.FileName))
             {
                 FileInfo fi = await fsAdapter.GetLastModFileAsync(mod.Name);

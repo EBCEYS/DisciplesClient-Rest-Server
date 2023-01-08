@@ -1,6 +1,7 @@
 using DataBase.DataBaseAdapters.UsersDataBaseAdapter;
 using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
 using Disciples2ClientDataBaseLibrary.DataBase;
+using Disciples2ClientDataBaseModels.DBModels;
 using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapter;
 using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapter.Interfaces;
 using DisciplesClient_Update_Service.JWTExtensions;
@@ -62,11 +63,12 @@ namespace DisciplesClient_Update_Service
         /// The remove queue file path. (Store the queue in json).
         /// </summary>
         public static string RemoveQueueFilePath { get; private set; }
+
+        private static ConcurrentDictionary<int, User> Users { get; } = new();
         /// <summary>
         /// The main.
         /// </summary>
-        /// <param name="args">The args.</param>
-        public static void Main(string[] args)
+        public static void Main()
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder();
             //BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -153,6 +155,8 @@ namespace DisciplesClient_Update_Service
             builder.Services.AddHostedService<DeleteModsHostedService>();
             builder.Services.AddHostedService<UpdateModsHostedService>();
 
+            builder.Services.AddSingleton(Users);
+
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -186,7 +190,7 @@ namespace DisciplesClient_Update_Service
                     RoleClaimType = ClaimTypes.Role
                 };
                 options.SecurityTokenValidators.Clear();
-                options.SecurityTokenValidators.Add(new RevokableJwtSecurityTokenHandler(builder.Services.BuildServiceProvider().GetService<IUsersDBAdapter>()));
+                options.SecurityTokenValidators.Add(new RevokableJwtSecurityTokenHandler(Users));
                 options.Validate();
             });
 

@@ -5,6 +5,7 @@ using Disciples2ClientDataBaseModels.DBModels;
 using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NLog;
+using System.Collections.Concurrent;
 
 namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter;
 
@@ -14,15 +15,18 @@ namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter;
 public class UsersDBAdapter : IUsersDBAdapter
 {
     private readonly Logger logger;
+    private readonly ConcurrentDictionary<int, User> users;
 
     /// <summary>
     /// Ctor for users db adapter.
     /// </summary>
     /// <param name="logger"></param>
+    /// <param name="users"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public UsersDBAdapter(Logger logger)
+    public UsersDBAdapter(Logger logger, ConcurrentDictionary<int, User> users)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.users = users ?? throw new ArgumentNullException(nameof(users));
     }
     /// <summary>
     /// Logins the user if exists.
@@ -35,7 +39,9 @@ public class UsersDBAdapter : IUsersDBAdapter
         try
         {
             await using Disciples2ClientDBConnext db = new();
-            return await db.Users.Where(u => u.IsActive && u.UserName == username && u.Password == password).FirstAsync();
+            User u = await db.Users.FirstOrDefaultAsync(u => u.IsActive && u.UserName == username && u.Password == password);
+            users[u.Id] = u;
+            return u;
         }
         catch(Exception ex)
         {
@@ -91,7 +97,7 @@ public class UsersDBAdapter : IUsersDBAdapter
         try
         {
             await using Disciples2ClientDBConnext db = new();
-            return await db.Users.Where(u => u.Id == id).FirstAsync();
+            return await db.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
         catch (Exception ex)
         {
@@ -138,6 +144,7 @@ public class UsersDBAdapter : IUsersDBAdapter
             await using Disciples2ClientDBConnext db = new();
             (await db.Users.FirstAsync(u => u.Id == id && u.IsActive)).IsActive = false;
             await db.SaveChangesAsync();
+            users.TryRemove(id, out _);
             return true;
         }
         catch (Exception ex)
@@ -212,8 +219,10 @@ public class UsersDBAdapter : IUsersDBAdapter
         try
         {
             await using Disciples2ClientDBConnext db = new();
-            (await db.Users.FirstOrDefaultAsync(usr => usr.Id == id && usr.Password == model.CurrentPassword)).Password = model.NewPassword;
+            User u = (await db.Users.FirstOrDefaultAsync(usr => usr.Id == id && usr.Password == model.CurrentPassword));
+            u.Password = model.NewPassword;
             await db.SaveChangesAsync();
+            users[u.Id] = u;
             return true;
         }
         catch(Exception ex)
@@ -243,6 +252,7 @@ public class UsersDBAdapter : IUsersDBAdapter
                 throw new UserNotFoundException();
             }
             await db.SaveChangesAsync();
+            users[usr.Id] = usr;
             return true;
         }
         catch (Exception ex)
@@ -262,8 +272,10 @@ public class UsersDBAdapter : IUsersDBAdapter
         try
         {
             await using Disciples2ClientDBConnext db = new();
-            (await db.Users.FirstOrDefaultAsync(usr => usr.Id == id && usr.UserName == model.CurrentUserName)).UserName = model.NewUserName;
+            User u = (await db.Users.FirstOrDefaultAsync(usr => usr.Id == id && usr.UserName == model.CurrentUserName));
+            u.UserName = model.NewUserName;
             await db.SaveChangesAsync();
+            users[u.Id] = u;
             return true;
         }
         catch (Exception ex)
