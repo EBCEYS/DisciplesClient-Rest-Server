@@ -61,6 +61,10 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
                 }
                 foreach (Mod mod in mods)
                 {
+                    if (string.IsNullOrEmpty(mod.FileName))
+                    {
+                        return;
+                    }
                     try
                     {
                         await ProcessMod(mod);
@@ -79,6 +83,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
             string[] files = await fsAdapter.GetModFilesAsync(mod.Name);
             if (files == null)
             {
+                await dbAdapter.UpdateModFileAsync(mod.Name, "");
                 return;
             }
             if (!files.Contains(mod.FileName))
