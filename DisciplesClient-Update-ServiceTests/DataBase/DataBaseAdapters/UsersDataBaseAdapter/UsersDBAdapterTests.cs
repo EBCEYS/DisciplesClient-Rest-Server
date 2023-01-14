@@ -2,13 +2,14 @@
 using Disciples2ClientDataBaseModels.DBModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NLog;
+using UserCache;
 
 namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter.Tests
 {
     [TestClass()]
     public class UsersDBAdapterTests
     {
-        private IUsersDBAdapter Adapter { get; set; } = new UsersDBAdapter(LogManager.CreateNullLogger());
+        private IUsersDBAdapter Adapter { get; set; } = new UsersDBAdapter(LogManager.CreateNullLogger(), new UsersCacheAdapter(LogManager.CreateNullLogger(), new()));
         [TestMethod()]
         public async void LoginUserAsyncTest()
         {

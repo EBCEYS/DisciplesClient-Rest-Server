@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "D2Launcher", "D2Launcher", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D2Launcher", "D2Launcher\D2Launcher.csproj", "{19BDFC8F-033E-49F8-91E7-514B10F5E7EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCache", "UserCacheAdapter\UserCache.csproj", "{63EB1F9F-2478-4DE3-927A-73435D373FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCache", "UserCacheAdapter\UserCache.csproj", "{63EB1F9F-2478-4DE3-927A-73435D373FA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

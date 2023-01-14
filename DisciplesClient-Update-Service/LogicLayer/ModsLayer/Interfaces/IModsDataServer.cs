@@ -24,7 +24,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.Interfaces
         /// Gets the mods names async.
         /// </summary>
         /// <returns></returns>
-        Task<ModInfo[]> GetModsNamesAsync();
+        Task<ModInfo[]> GetModsNamesAsync(bool isSoftware = false);
         /// <summary>
         /// Removes the mod.
         /// </summary>
@@ -41,7 +41,8 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.Interfaces
         /// <param name="authorName"></param>
         /// <param name="mod"></param>
         /// <param name="updateDateTime"></param>
+        /// <param name="isSoftware"></param>
         /// <returns></returns>
-        Task<bool> UploadModAsync(string modName, string version, string authorName, IFormFile mod, DateTimeOffset? updateDateTime = null);
+        Task<bool> UploadModAsync(string modName, string version, string authorName, IFormFile mod, DateTimeOffset? updateDateTime = null, bool isSoftware = false);
     }
 }

@@ -5,10 +5,7 @@ using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapt
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.Interfaces;
 using DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdapter.Interfaces;
 using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using NLog;
-using Npgsql;
-using System.Reflection.Metadata.Ecma335;
 
 namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
 {
@@ -42,9 +39,9 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
         /// Gets the mod list async.
         /// </summary>
         /// <returns>The mods array; if catched any exceptions: null.</returns>
-        public async Task<ModInfo[]> GetModsNamesAsync()
+        public async Task<ModInfo[]> GetModsNamesAsync(bool isSoftware = false)
         {
-            Mod[] modsArray = await modsDBAdapter.GetModsListAsync();
+            Mod[] modsArray = await modsDBAdapter.GetModsListAsync(isSoftware);
             if (modsArray == null)
             {
                 return null;
@@ -65,9 +62,10 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
         /// <param name="authorName">The author name.</param>
         /// <param name="mod">The mod file.</param>
         /// <param name="updateDateTime">The update mod date time.</param>
+        /// <param name="isSoftware"></param>
         /// <returns></returns>
         /// <exception cref="UserNotFoundException"></exception>
-        public async Task<bool> UploadModAsync(string modName, string version, string authorName, IFormFile mod, DateTimeOffset? updateDateTime = null)
+        public async Task<bool> UploadModAsync(string modName, string version, string authorName, IFormFile mod, DateTimeOffset? updateDateTime = null, bool isSoftware = false)
         {
             try
             {
@@ -76,31 +74,28 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer
                     updateDateTime = DateTimeOffset.UtcNow;
                 }
                 User author = await usersDBAdapter.GetUserByUserNameAsync(authorName) ?? throw new UserNotFoundException();
-                Mod modDB = await modsDBAdapter.GetModByAuthorAsync(modName, author.Id);
-                if (await ProcessModFileAsync(mod, modName))
+                Mod modDB = await modsDBAdapter.GetModByAuthorAsync(modName, author.Id, isSoftware);
+                if (!(await ProcessModFileAsync(mod, modName)))
                 {
-                    if (modDB != null)
-                    {
-                        return await modsDBAdapter.UpdateModAsync(modName, mod.FileName, version, updateDateTime);
-                    }
-                    else
-                    {
-                        modDB = new()
-                        {
-                            AuthorUserId = author.Id,
-                            //Author = author,
-                            Name = modName,
-                            Version = version,
-                            FirstUpdateDateTime = DateTimeOffset.UtcNow,
-                            LastUpdateDateTime = DateTimeOffset.UtcNow,
-                            FileName = mod.FileName
-                        };
-                        return await modsDBAdapter.CreateModAsync(modDB);
-                    }
+                    return false;
+                }
+                if (modDB != null)
+                {
+                    return await modsDBAdapter.UpdateModAsync(modName, mod.FileName, version, updateDateTime, isSoftware);
                 }
                 else
                 {
-                    return false;
+                    modDB = new()
+                    {
+                        AuthorUserId = author.Id,
+                        Name = modName,
+                        Version = version,
+                        FirstUpdateDateTime = DateTimeOffset.UtcNow,
+                        LastUpdateDateTime = DateTimeOffset.UtcNow,
+                        FileName = mod.FileName,
+                        IsSoftware = isSoftware
+                    };
+                    return await modsDBAdapter.CreateModAsync(modDB);
                 }
             }
             catch(Exception ex)

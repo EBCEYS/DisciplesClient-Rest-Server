@@ -59,9 +59,10 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// <param name="fileName"></param>
         /// <param name="version">The new mod version.</param>
         /// <param name="updateTime">The update time.</param>
+        /// <param name="isSoftware"></param>
         /// <returns>true if updated successfuly; otherwise false.</returns>
         /// <exception cref="WrongModUpdateDateTimeException"/>
-        public async Task<bool> UpdateModAsync(string modName, string fileName, string version, DateTimeOffset? updateTime = null)
+        public async Task<bool> UpdateModAsync(string modName, string fileName, string version, DateTimeOffset? updateTime = null, bool isSoftware = false)
         {
             if (updateTime == null)
             {
@@ -70,10 +71,14 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
             try
             {
                 await using Disciples2ClientDBConnext db = new();
-                Mod mod = await db.Mods.FirstOrDefaultAsync(mod => mod.Name == modName);
+                Mod mod = await db.Mods.FirstOrDefaultAsync(mod => mod.Name == modName && mod.IsSoftware == isSoftware);
+                if (mod == null)
+                {
+                    return false;
+                }
                 if (mod.LastUpdateDateTime > updateTime)
                 {
-                    throw new WrongModUpdateDateTimeException(mod.LastUpdateDateTime, updateTime.Value); //TODO: добавить отдельные эксепшоны
+                    throw new WrongModUpdateDateTimeException(mod.LastUpdateDateTime, updateTime.Value);
                 }
                 mod.LastUpdateDateTime = updateTime.Value;
                 mod.Version = version;
@@ -95,12 +100,12 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// Gets the mod's list.
         /// </summary>
         /// <returns>The mod list; null if catched any exceptions.</returns>
-        public async Task<Mod[]> GetModsListAsync()
+        public async Task<Mod[]> GetModsListAsync(bool isSoftware = false)
         {
             try
             {
                 await using Disciples2ClientDBConnext db = new();
-                Mod[] mods = (await db.Mods.ToListAsync()).ToArray();
+                Mod[] mods = (await db.Mods.Where(m => m.IsSoftware == isSoftware).ToListAsync()).ToArray();
                 return mods;
             }
             catch (Exception ex)
@@ -114,13 +119,14 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// </summary>
         /// <param name="modName">The mod name.</param>
         /// <param name="authorName">The author name.</param>
+        /// <param name="isSoftware">The is software.</param>
         /// <returns>The mod if exists; otherwise null.</returns>
-        public async Task<Mod> GetModByAuthorAsync(string modName, string authorName)
+        public async Task<Mod> GetModByAuthorAsync(string modName, string authorName, bool isSoftware = false)
         {
             try
             {
                 await using Disciples2ClientDBConnext db = new();
-                return await db.Mods.FirstOrDefaultAsync(m => m.Name == modName && m.Author.UserName == authorName);
+                return await db.Mods.FirstOrDefaultAsync(m => m.Name == modName && m.Author.UserName == authorName && m.IsSoftware == isSoftware);
             }
             catch (Exception ex)
             {
@@ -133,13 +139,14 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// </summary>
         /// <param name="modName">The mod name.</param>
         /// <param name="authorId">The author id.</param>
+        /// <param name="isSoftware"></param>
         /// <returns>The mod if exists; otherwise null.</returns>
-        public async Task<Mod> GetModByAuthorAsync(string modName, int authorId)
+        public async Task<Mod> GetModByAuthorAsync(string modName, int authorId, bool isSoftware = false)
         {
             try
             {
                 await using Disciples2ClientDBConnext db = new();
-                return await db.Mods.FirstOrDefaultAsync(m => m.Name == modName && m.AuthorUserId == authorId);
+                return await db.Mods.FirstOrDefaultAsync(m => m.Name == modName && m.AuthorUserId == authorId && m.IsSoftware == isSoftware);
             }
             catch (Exception ex)
             {

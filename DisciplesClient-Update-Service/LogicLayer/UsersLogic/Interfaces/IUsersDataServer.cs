@@ -55,6 +55,11 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces
         /// <param name="loginModel">The login model.</param>
         /// <returns>The generated token.</returns>
         Task<string> Login(LoginModel loginModel);
+        /// <summary>
+        /// Logouts the user. Removes user from cache.
+        /// </summary>
+        /// <param name="userId">The user id.</param>
+        /// <returns>true if removed successfuly; otherwise false.</returns>
         bool Logout(int userId);
     }
 }

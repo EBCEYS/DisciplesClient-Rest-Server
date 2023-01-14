@@ -11,23 +11,23 @@
 
         public void ShowWidget()
         {
+            this.Enabled = true;
+            this.Visible = true;
             if (OnShowingWidget != null)
             {
                 OnShowingWidget!.Invoke();
             }
-            this.Enabled = true;
-            this.Visible = true;
             this.Show();
         }
 
         public void HideWidget()
         {
+            this.Enabled = false;
+            this.Visible = false;
             if (OnHiddenWidget != null)
             {
                 OnHiddenWidget!.Invoke();
             }
-            this.Enabled = false;
-            this.Visible = false;
             this.Hide();
         }
     }

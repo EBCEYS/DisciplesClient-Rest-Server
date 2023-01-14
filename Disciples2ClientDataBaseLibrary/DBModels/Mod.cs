@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Disciples2ClientDataBaseModels.DBModels
@@ -21,5 +20,7 @@ namespace Disciples2ClientDataBaseModels.DBModels
         public User Author { get; set; }
         [Required]
         public string FileName { get; set; }
+        [Required]
+        public bool IsSoftware { get; set; } = false;
     }
 }

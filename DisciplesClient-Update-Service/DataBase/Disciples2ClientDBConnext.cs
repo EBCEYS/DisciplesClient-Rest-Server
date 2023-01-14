@@ -40,6 +40,7 @@ public class Disciples2ClientDBConnext : DbContext, IDisposable, IAsyncDisposabl
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasKey(u => u.Id);
+
         modelBuilder.Entity<Mod>().HasKey(mod => mod.Name);
         modelBuilder.Entity<Mod>()
             .HasOne(p => p.Author)

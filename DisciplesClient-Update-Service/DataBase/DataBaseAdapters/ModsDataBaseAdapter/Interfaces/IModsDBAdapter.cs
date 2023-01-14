@@ -18,15 +18,17 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// </summary>
         /// <param name="modName"></param>
         /// <param name="authorName"></param>
+        /// <param name="isSoftware"></param>
         /// <returns></returns>
-        Task<Mod> GetModByAuthorAsync(string modName, string authorName);
+        Task<Mod> GetModByAuthorAsync(string modName, string authorName, bool isSoftware = false);
         /// <summary>
         /// Gets mod by author.
         /// </summary>
         /// <param name="modName"></param>
         /// <param name="authorId"></param>
+        /// <param name="isSoftware"></param>
         /// <returns></returns>
-        Task<Mod> GetModByAuthorAsync(string modName, int authorId);
+        Task<Mod> GetModByAuthorAsync(string modName, int authorId, bool isSoftware = false);
         /// <summary>
         /// Gets mod by name.
         /// </summary>
@@ -38,7 +40,7 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// Gets the mods list async.
         /// </summary>
         /// <returns></returns>
-        Task<Mod[]> GetModsListAsync();
+        Task<Mod[]> GetModsListAsync(bool isSoftware = false);
         /// <summary>
         /// Remove mod.
         /// </summary>
@@ -53,8 +55,9 @@ namespace DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseA
         /// <param name="fileName">The mod file name.</param>
         /// <param name="version">The mod version.</param>
         /// <param name="updateTime">The update time.</param>
+        /// <param name="isSoftware"></param>
         /// <returns></returns>
-        Task<bool> UpdateModAsync(string modName, string fileName, string version, DateTimeOffset? updateTime = null);
+        Task<bool> UpdateModAsync(string modName, string fileName, string version, DateTimeOffset? updateTime = null, bool isSoftware = false);
         /// <summary>
         /// Updates mod file.
         /// </summary>

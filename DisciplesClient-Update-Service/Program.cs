@@ -71,7 +71,6 @@ namespace DisciplesClient_Update_Service
         public static void Main()
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder();
-            //BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             BasePath = builder.Environment.ContentRootPath;
             builder.Host.UseContentRoot(Directory.GetCurrentDirectory());
             builder.Configuration.SetBasePath(BasePath);

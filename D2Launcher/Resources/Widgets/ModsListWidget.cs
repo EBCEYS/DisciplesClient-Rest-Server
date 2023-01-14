@@ -11,7 +11,6 @@ namespace D2Launcher.Resources.Widgets
         {
             InitializeComponent();
             OnShowingWidget += FillModsComboBox;
-            //TODO: разобраться почему не обновляется список при показывании виджета.
         }
 
         private List<ModInfo> modsInfo;
@@ -27,10 +26,6 @@ namespace D2Launcher.Resources.Widgets
 
         private void FillModsComboBox()
         {
-            if (!this.Enabled)
-            {
-                return;
-            }
             try
             {
                 ModsListComboBox.Text = string.Empty;
