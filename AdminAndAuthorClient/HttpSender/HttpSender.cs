@@ -530,5 +530,25 @@ namespace AdminAndAuthorClient.Http
             }
             throw new NotImplementedException($"Unsupported type: {type}!");
         }
+
+        public bool Logout()
+        {
+            try
+            {
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/user/logout"
+                };
+                HttpRequestMessage msg = new(HttpMethod.Post, builder.Uri);
+                HttpResponseMessage res = client.Send(msg);
+                CheckUnathorized(res);
+                return res.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
     }
 }

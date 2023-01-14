@@ -183,6 +183,7 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
 
         private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Program.HttpSender.Logout();
             LoginForm loginForm = new();
             loginForm.ShowDialog();
         }
