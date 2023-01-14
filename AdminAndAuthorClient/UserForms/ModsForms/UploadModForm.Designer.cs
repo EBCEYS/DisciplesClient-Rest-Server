@@ -30,13 +30,15 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ModVersionTextBox = new System.Windows.Forms.TextBox();
+            this.ModNameTextBox = new System.Windows.Forms.TextBox();
             this.UploadButton = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.SelectArchiveButton = new System.Windows.Forms.Button();
-            this.ModNameTextBox = new System.Windows.Forms.TextBox();
-            this.ModVersionTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.UploadStateLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +54,8 @@
             // groupBox1
             // 
             this.groupBox1.AutoSize = true;
+            this.groupBox1.Controls.Add(this.UploadStateLabel);
+            this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.ModVersionTextBox);
@@ -62,14 +66,57 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(296, 265);
+            this.groupBox1.Size = new System.Drawing.Size(300, 274);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(207, 202);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(87, 19);
+            this.checkBox1.TabIndex = 9;
+            this.checkBox1.Text = "is software?";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 176);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(76, 15);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Mod version:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 114);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(68, 15);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Mod name:";
+            // 
+            // ModVersionTextBox
+            // 
+            this.ModVersionTextBox.Location = new System.Drawing.Point(89, 173);
+            this.ModVersionTextBox.Name = "ModVersionTextBox";
+            this.ModVersionTextBox.Size = new System.Drawing.Size(201, 23);
+            this.ModVersionTextBox.TabIndex = 6;
+            // 
+            // ModNameTextBox
+            // 
+            this.ModNameTextBox.Location = new System.Drawing.Point(89, 111);
+            this.ModNameTextBox.Multiline = true;
+            this.ModNameTextBox.Name = "ModNameTextBox";
+            this.ModNameTextBox.Size = new System.Drawing.Size(201, 56);
+            this.ModNameTextBox.TabIndex = 5;
             // 
             // UploadButton
             // 
             this.UploadButton.AutoSize = true;
-            this.UploadButton.Location = new System.Drawing.Point(215, 218);
+            this.UploadButton.Location = new System.Drawing.Point(215, 227);
             this.UploadButton.Name = "UploadButton";
             this.UploadButton.Size = new System.Drawing.Size(75, 25);
             this.UploadButton.TabIndex = 4;
@@ -91,7 +138,7 @@
             // SelectArchiveButton
             // 
             this.SelectArchiveButton.AutoSize = true;
-            this.SelectArchiveButton.Location = new System.Drawing.Point(6, 218);
+            this.SelectArchiveButton.Location = new System.Drawing.Point(0, 227);
             this.SelectArchiveButton.Name = "SelectArchiveButton";
             this.SelectArchiveButton.Size = new System.Drawing.Size(102, 25);
             this.SelectArchiveButton.TabIndex = 2;
@@ -99,48 +146,23 @@
             this.SelectArchiveButton.UseVisualStyleBackColor = true;
             this.SelectArchiveButton.Click += new System.EventHandler(this.SelectArchiveButton_Click);
             // 
-            // ModNameTextBox
+            // UploadStateLabel
             // 
-            this.ModNameTextBox.Location = new System.Drawing.Point(89, 111);
-            this.ModNameTextBox.Multiline = true;
-            this.ModNameTextBox.Name = "ModNameTextBox";
-            this.ModNameTextBox.Size = new System.Drawing.Size(201, 56);
-            this.ModNameTextBox.TabIndex = 5;
-            // 
-            // ModVersionTextBox
-            // 
-            this.ModVersionTextBox.Location = new System.Drawing.Point(89, 173);
-            this.ModVersionTextBox.Name = "ModVersionTextBox";
-            this.ModVersionTextBox.Size = new System.Drawing.Size(201, 23);
-            this.ModVersionTextBox.TabIndex = 6;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 114);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 15);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Mod name:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 176);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(76, 15);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Mod version:";
+            this.UploadStateLabel.AutoSize = true;
+            this.UploadStateLabel.Location = new System.Drawing.Point(108, 232);
+            this.UploadStateLabel.Name = "UploadStateLabel";
+            this.UploadStateLabel.Size = new System.Drawing.Size(0, 15);
+            this.UploadStateLabel.TabIndex = 10;
             // 
             // UploadModForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(323, 282);
+            this.ClientSize = new System.Drawing.Size(323, 293);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "UploadModForm";
-            this.Text = "UploadModForm";
+            this.Text = "Upload mod/software";
             this.Load += new System.EventHandler(this.UploadModForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -160,5 +182,7 @@
         private Label label2;
         private TextBox ModVersionTextBox;
         private TextBox ModNameTextBox;
+        private CheckBox checkBox1;
+        private Label UploadStateLabel;
     }
 }

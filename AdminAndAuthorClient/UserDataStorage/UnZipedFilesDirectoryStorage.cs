@@ -5,7 +5,7 @@ namespace AdminAndAuthorClient.UserDataStorage
 {
     public static class UnZipedFilesDirectoryStorage
     {
-        public static ConcurrentDictionary<string, string> ModsInfo { get; private set; } = new(); // TODO: Переделать на класс ModInfo
+        public static ConcurrentDictionary<string, string> ModsInfo { get; private set; } = new();
 
         public static void LoadGamesDirectories()
         {
@@ -34,7 +34,6 @@ namespace AdminAndAuthorClient.UserDataStorage
                 if (File.Exists(Program.GamesInfoDir))
                 {
                     File.Delete(Program.GamesInfoDir);
-                    File.Create(Program.GamesInfoDir);
                 }
                 File.WriteAllText(Program.GamesInfoDir, JsonSerializer.Serialize(ModsInfo, Program.SerializerOptions));
             }

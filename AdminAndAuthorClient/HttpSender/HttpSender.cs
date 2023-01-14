@@ -550,5 +550,69 @@ namespace AdminAndAuthorClient.Http
                 return false;
             }
         }
+
+        public async Task UploadSoftFileAync(string softName, string version, string file, DateTimeOffset? updateDateTime = null)
+        {
+            try
+            {
+                QueryBuilder qBuilder = new()
+                {
+                    { "softName", softName },
+                    { "version", version }
+                };
+                if (updateDateTime != null)
+                {
+                    qBuilder.Add("updateDateTime", updateDateTime.ToString());
+                }
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/d2client/soft/upload",
+                    Query = qBuilder.ToString()
+                };
+                MultipartFormDataContent content = new()
+                {
+                    { new ByteArrayContent(await File.ReadAllBytesAsync(file)), "mod", Path.GetFileName(file) }
+                };
+                HttpResponseMessage res = await client.PostAsync(builder.Uri, content);
+                if (res.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Upload mod {softName} successfuly!");
+                    return;
+                }
+                CheckUnathorized(res);
+                throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public ModInfo[] GetSoftInfo()
+        {
+            try
+            {
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/d2client/soft/soft-list"
+                };
+                HttpRequestMessage msg = new(HttpMethod.Get, builder.Uri);
+                HttpResponseMessage res = client.Send(msg);
+                if (res.IsSuccessStatusCode)
+                {
+                    using Stream stream = res.Content.ReadAsStream();
+                    using StreamReader reader = new(stream);
+                    string json = reader.ReadToEnd();
+                    return JsonSerializer.Deserialize<ModInfo[]>(json, Program.SerializerOptions);
+                }
+                CheckUnathorized(res);
+                throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
     }
 }

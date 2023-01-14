@@ -22,11 +22,13 @@ namespace AdminAndAuthorClient.Http
         string[] GetModFiles(string modName);
         ModInfo[] GetModsInfo();
         Task<ModInfo[]> GetModsInfoAsync();
+        ModInfo[] GetSoftInfo();
         User GetUserById(int id);
         bool Logout();
         string PostLoginRequest(string userName, string password);
         Task<string> PostLoginRequestAsync(string userName, string password);
         void SetToken(string token);
         Task UploadModFileAync(string modName, string version, string file, DateTimeOffset? updateDateTime = null);
+        Task UploadSoftFileAync(string softName, string version, string file, DateTimeOffset? updateDateTime = null);
     }
 }

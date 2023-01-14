@@ -11,6 +11,8 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
     public partial class MainForm : Form
     {
         private ModInfo[] mods;
+        private ModInfo[] soft;
+        private const string labelText = "Disciples2 admin client";
         public MainForm()
         {
             InitializeComponent();
@@ -43,13 +45,20 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
             {
                 ModsListDataGrid.DataSource = mods;
                 ModsListDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                CreateModsDirs();
+                CreateModsDirs(mods);
+            }
+            soft = Program.HttpSender.GetSoftInfo() ?? soft;
+            if (soft is not null)
+            {
+                SoftListDataGridView.DataSource = soft;
+                SoftListDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                CreateModsDirs(soft);
             }
         }
 
-        private void CreateModsDirs()
+        private static void CreateModsDirs(ModInfo[] array)
         {
-            foreach(ModInfo mod in mods)
+            foreach(ModInfo mod in array)
             {
                 string path = Path.Combine(Program.BasePath, "archives", mod.Name);
                 if (!Directory.Exists(path))
@@ -77,9 +86,16 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
         private string GetSelectedModName()
         {
             int selectedRowsCount = ModsListDataGrid.SelectedRows.Count;
-            if (selectedRowsCount <= 0)
+            int selectedSoftRowsCount = SoftListDataGridView.SelectedRows.Count;
+            if (selectedRowsCount <= 0 && selectedSoftRowsCount <= 0)
             {
-                throw new Exception("Select mod in table");
+                throw new Exception("Select row in one of tables");
+            }
+            if (selectedSoftRowsCount > 0)
+            {
+                DataGridViewRow softRow = SoftListDataGridView.SelectedRows[0];
+                string softName = softRow.Cells[0].Value.ToString();
+                return softName;
             }
             DataGridViewRow mod = ModsListDataGrid.SelectedRows[0];
             string modName = mod.Cells[0].Value.ToString();
@@ -120,10 +136,9 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
                 {
                     throw new DirectoryNotFoundException(extractDir);
                 }
-                Task.Run(async () => 
-                { 
-                    await Program.HttpSender.DownloadModFileAsync(modName, modDir, extractDir);
-                });
+                this.Text = "Downloading...";
+                Task.Run(async () => await Program.HttpSender.DownloadModFileAsync(modName, modDir, extractDir)).Wait();
+                this.Text = labelText;
             }
             catch(Exception ex)
             {
@@ -186,6 +201,44 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
             Program.HttpSender.Logout();
             LoginForm loginForm = new();
             loginForm.ShowDialog();
+        }
+
+        private void ModsListDataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SoftListDataGridView.ClearSelection();
+        }
+
+        private void SoftListDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ModsListDataGrid.ClearSelection();
+        }
+
+        private void UpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string name = GetSelectedModName();
+            if (string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+            ModInfo? info = null;
+            bool isSoftware = false;
+            if (mods.Any(m => m.Name == name))
+            {
+                info = mods.First(m => m.Name == name);
+            }
+            if (soft.Any(s => s.Name == name))
+            {
+                info = soft.First(s => s.Name == name);
+                isSoftware = true;
+            }
+            if (info is null)
+            {
+                MessageBox.Show("Plz select one of row from tables!");
+                return;
+            }
+            UploadModForm form = new(info, isSoftware);
+            form.ShowDialog();
+            UpdateModsDataGrid();
         }
     }
 }
