@@ -9,6 +9,7 @@ namespace D2Launcher.Resources.Widgets
         public InstalledD2ModsWidget() : base()
         {
             InitializeComponent();
+            OnShowingWidget += UpdateModList;
         }
 
         private void InstalledD2ModsWidget_Load(object sender, EventArgs e)
@@ -18,6 +19,7 @@ namespace D2Launcher.Resources.Widgets
 
         private void UpdateModList()
         {
+            InstalledModsComboBox.Text = string.Empty;
             InstalledModsComboBox.Items.Clear();
             foreach (InstalledModInfo mi in ModsInfoStorage.InstalledModsInfo)
             {
@@ -69,6 +71,7 @@ namespace D2Launcher.Resources.Widgets
             }
             bool removeResult = ModsInfoStorage.RemoveMod(mod);
             string resultMsg = removeResult ? "OK" : "ERROR";
+            UpdateModList();
             MessageBox.Show($"Remove result is: {resultMsg}!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

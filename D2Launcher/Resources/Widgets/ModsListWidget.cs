@@ -10,6 +10,8 @@ namespace D2Launcher.Resources.Widgets
         public ModsListWidget() : base()
         {
             InitializeComponent();
+            OnShowingWidget += FillModsComboBox;
+            //TODO: разобраться почему не обновляется список при показывании виджета.
         }
 
         private List<ModInfo> modsInfo;
@@ -31,6 +33,7 @@ namespace D2Launcher.Resources.Widgets
             }
             try
             {
+                ModsListComboBox.Text = string.Empty;
                 ModsListComboBox.Items.Clear();
                 ProcessInfoLabel.Text = "Getting mod list...";
                 modsInfo = Program.HttpSender.GetModsInfo()?.ToList() ?? modsInfo;
@@ -123,8 +126,8 @@ namespace D2Launcher.Resources.Widgets
             {
                 ShowException(ex);
                 ProcessInfoLabel.Text = "Error!";
-                return;
             }
+            FillModsComboBox();
         }
 
         private static async Task CreateModInfoFileAsync(ModInfo mod, string modPath)

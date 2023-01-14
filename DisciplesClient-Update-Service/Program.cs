@@ -19,11 +19,11 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using System.Collections.Concurrent;
-using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using UserCache;
 
 namespace DisciplesClient_Update_Service
 {
@@ -156,6 +156,7 @@ namespace DisciplesClient_Update_Service
             builder.Services.AddHostedService<UpdateModsHostedService>();
 
             builder.Services.AddSingleton(Users);
+            builder.Services.AddSingleton<IUsersCacheAdapter, UsersCacheAdapter>();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
@@ -190,7 +191,7 @@ namespace DisciplesClient_Update_Service
                     RoleClaimType = ClaimTypes.Role
                 };
                 options.SecurityTokenValidators.Clear();
-                options.SecurityTokenValidators.Add(new RevokableJwtSecurityTokenHandler(Users));
+                options.SecurityTokenValidators.Add(new RevokableJwtSecurityTokenHandler(builder.Services.BuildServiceProvider().GetService<IUsersCacheAdapter>()));
                 options.Validate();
             });
 

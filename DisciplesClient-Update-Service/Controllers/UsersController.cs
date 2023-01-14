@@ -93,6 +93,40 @@ namespace DisciplesClient_Update_Service.Controllers
             }
         }
         /// <summary>
+        /// Logouts authorized user.
+        /// </summary>
+        /// <response code="200">Successfully logout.</response>
+        /// <response code="400">Can not find user id in token.</response>
+        /// <response code="401">Unathorized.</response>
+        /// <response code="500">Something wrong!</response>
+        [HttpPost("logout")]
+        [Authorize]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public ActionResult Logout()
+        {
+            logger.Debug("Logout request");
+            try
+            {
+                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value, out int id))
+                {
+                    throw new Exception("Can not parse user id!");
+                }
+                if (dataServer.Logout(id))
+                {
+                    return Ok();
+                }
+                return NotFound();
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "Error on logouting user!");
+                return BadRequest();
+            }
+        }
+        /// <summary>
         /// The login request.
         /// </summary>
         /// <returns></returns>

@@ -9,13 +9,13 @@ namespace D2Launcher.Tools
 
         public static bool RemoveMod(InstalledModInfo mod)
         {
-            bool removeResult = InstalledModsInfo.Remove(mod);
-            if (removeResult)
+            int removeResult = InstalledModsInfo.RemoveAll(m => m.ModInfo.Name == mod.ModInfo.Name && m.Path == mod.Path);
+            if (removeResult > 0)
             {
                 Directory.Delete(mod.Path, true);
                 WriteInstalledModsInfo();
             }
-            return removeResult;
+            return removeResult > 0;
         }
 
         public static bool TryAdd(InstalledModInfo info)

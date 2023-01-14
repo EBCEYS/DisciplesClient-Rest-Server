@@ -55,5 +55,6 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic.Interfaces
         /// <param name="loginModel">The login model.</param>
         /// <returns>The generated token.</returns>
         Task<string> Login(LoginModel loginModel);
+        bool Logout(int userId);
     }
 }

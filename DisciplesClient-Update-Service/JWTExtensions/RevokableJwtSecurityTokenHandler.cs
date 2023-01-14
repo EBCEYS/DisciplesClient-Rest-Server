@@ -1,9 +1,7 @@
-﻿using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
-using Disciples2ClientDataBaseModels.DBModels;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections.Concurrent;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using UserCache;
 
 namespace DisciplesClient_Update_Service.JWTExtensions
 {
@@ -12,16 +10,16 @@ namespace DisciplesClient_Update_Service.JWTExtensions
     /// </summary>
     public class RevokableJwtSecurityTokenHandler : JwtSecurityTokenHandler
     {
-        private readonly ConcurrentDictionary<int, User> users;
+        private readonly IUsersCacheAdapter cacheAdapter;
 
         /// <summary>
         /// Initiates the <see cref="RevokableJwtSecurityTokenHandler"/>.
         /// </summary>
-        /// <param name="users">Cashed users.</param>
+        /// <param name="cacheAdapter">The users cache adapter.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public RevokableJwtSecurityTokenHandler(ConcurrentDictionary<int, User> users)
+        public RevokableJwtSecurityTokenHandler(IUsersCacheAdapter cacheAdapter)
         {
-            this.users = users ?? throw new ArgumentNullException(nameof(users));
+            this.cacheAdapter = cacheAdapter ?? throw new ArgumentNullException(nameof(cacheAdapter));
         }
         /// <summary>
         /// Validates the token.
@@ -38,58 +36,11 @@ namespace DisciplesClient_Update_Service.JWTExtensions
             Claim userName = claimsPrincipal.FindFirst(ClaimTypes.Name);
             Claim[] roles = claimsPrincipal.FindAll(ClaimTypes.Role).ToArray();
             Claim id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
-            if (!CheckParams(id, userName, pas, roles))
+            if (!cacheAdapter.CheckUserParameters(id, userName, pas, roles))
             {
                 throw new SecurityTokenValidationException();
             }
             return claimsPrincipal;
-        }
-
-        private bool CheckParams(Claim id, Claim username, Claim pas, Claim[] roles)
-        {
-            try
-            {
-                if (id is null)
-                {
-                    throw new SecurityTokenValidationException(nameof(id));
-                }
-                if (username is null)
-                {
-                    throw new SecurityTokenValidationException(nameof(username));
-                }
-                if (pas is null)
-                {
-                    throw new SecurityTokenValidationException(nameof(pas));
-                }
-                if (roles is null)
-                {
-                    throw new SecurityTokenValidationException(nameof(roles));
-                }
-                if (!int.TryParse(id.Value, out int userId))
-                {
-                    throw new SecurityTokenValidationException("Id is not correct!");
-                }
-                List<string> rolesList = new();
-                foreach(Claim role in roles)
-                {
-                    rolesList.Add(role.Value);
-                }
-                if (users.TryGetValue(userId, out User u))
-                {
-                    return CheckUserParams(u, pas.Value, username.Value, rolesList.ToArray());
-                }
-                return false;
-
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-        }
-
-        private static bool CheckUserParams(User u, string password, string username, string[] roles)
-        {
-            return u.IsActive && u.Password == password && u.UserName == username && u.Roles.SequenceEqual(roles);
         }
     }
 }

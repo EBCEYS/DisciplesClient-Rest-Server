@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using UserCache;
 
 namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic
 {
@@ -19,16 +20,19 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic
     {
         private readonly Logger logger;
         private readonly IUsersDBAdapter usersDBAdapter;
+        private readonly IUsersCacheAdapter usersCache;
 
         /// <summary>
         /// The ctor for data server.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="usersDBAdapter"></param>
-        public UsersDataServer(Logger logger, IUsersDBAdapter usersDBAdapter)
+        /// <param name="usersDBAdapter">The user data base adapter.</param>
+        /// <param name="usersCache">The users cache.</param>
+        public UsersDataServer(Logger logger, IUsersDBAdapter usersDBAdapter, IUsersCacheAdapter usersCache)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.usersDBAdapter = usersDBAdapter ?? throw new ArgumentNullException(nameof(usersDBAdapter));
+            this.usersCache = usersCache ?? throw new ArgumentNullException(nameof(usersCache));
         }
 
         private static string CreateHash(string input)
@@ -190,5 +194,11 @@ namespace DisciplesClient_Update_Service.LogicLayer.UsersLogic
                 throw new UserNotFoundException();
             }
         }
+        /// <summary>
+        /// Logouts the user. Removes user from cache.
+        /// </summary>
+        /// <param name="userId">The user id.</param>
+        /// <returns>true if successfuly removed user from cache; otherwise false.</returns>
+        public bool Logout(int userId) => usersCache.RemoveUser(userId);
     }
 }
