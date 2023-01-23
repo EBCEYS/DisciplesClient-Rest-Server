@@ -45,7 +45,7 @@ namespace DisciplesClient_Update_Service.Controllers
         {
             try
             {
-                string name = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                string name = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
                 string[] roles = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray();
                 int id = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(x => int.Parse(x.Value)).FirstOrDefault();
 
@@ -110,7 +110,7 @@ namespace DisciplesClient_Update_Service.Controllers
             logger.Debug("Logout request");
             try
             {
-                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value, out int id))
+                if (!int.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int id))
                 {
                     throw new Exception("Can not parse user id!");
                 }

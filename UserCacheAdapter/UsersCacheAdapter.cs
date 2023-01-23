@@ -14,7 +14,7 @@ namespace UserCache
     {
         private readonly Logger logger;
 
-        private ConcurrentDictionary<int, User> usersCash;
+        private readonly ConcurrentDictionary<int, User> usersCash;
         public UsersCacheAdapter(Logger logger, ConcurrentDictionary<int, User> usersCash)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

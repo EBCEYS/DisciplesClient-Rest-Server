@@ -20,7 +20,7 @@ namespace AdminAndAuthorClient.Http
         {
             if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                UnAuthorizedError!.Invoke();
+                UnAuthorizedError?.Invoke();
             }
         }
 
@@ -29,9 +29,9 @@ namespace AdminAndAuthorClient.Http
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }
-        public HttpSender(HttpClient httpClient = null)
+        public HttpSender()
         {
-            this.client = httpClient ?? new HttpClient()
+            this.client = new HttpClient()
             {
                 Timeout = TimeSpan.FromSeconds(10)
             };
