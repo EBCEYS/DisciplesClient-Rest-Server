@@ -1,6 +1,8 @@
 ﻿using D2Launcher.Tools;
 using Disciples2ApiModels.D2ApiModels;
 using System.Diagnostics;
+using System.IO.Compression;
+using System.Security.AccessControl;
 
 namespace D2Launcher.Resources.Widgets
 {
@@ -92,12 +94,42 @@ namespace D2Launcher.Resources.Widgets
                 MessageBox.Show("There's no updates!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            DialogResult dr = MessageBox.Show($"Mods: {string.Join(", ", modsToUpdate.Select(x => x.ModInfo.Name))} ready to update.{Environment.NewLine}Do you want to update now?", "Mods to update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult dr = MessageBox.Show($"Mods: {string.Join(", ", modsToUpdate.Select(x => x.ModInfo.Name))} ready to update.{Environment.NewLine}Do you want to update now?{Environment.NewLine}Mod directory will be removed!", "Mods to update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr != DialogResult.Yes)
             {
                 return;
             }
-            //TODO: сделать update модов
+            UpdateMods(modsToUpdate.ToArray());
+        }
+
+        private static void UpdateMods(params InstalledModInfo[] mods)
+        {
+            foreach(InstalledModInfo mod in mods)
+            {
+                DirectoryInfo dirInfo = new(mod.Path);
+                try
+                {
+                    if (dirInfo.Exists)
+                    {
+                        dirInfo.Delete(true);
+                    }
+                    dirInfo.Create();
+                    string modPath = dirInfo.FullName;
+                    Task.Run(async () =>
+                    {
+                        string downloadedFile = await Program.HttpSender.DownloadModFileAsync(mod.ModInfo.Name, modPath);
+                        ZipFile.ExtractToDirectory(downloadedFile, modPath, true);
+                        File.Delete(downloadedFile);
+                    }).Wait();
+                    Task.Run(async () => await ModsListWidget.CreateModInfoFileAsync(mod.ModInfo, modPath)).Wait();
+                    ModsInfoStorage.RemoveMod(mod);
+                    ModsInfoStorage.TryAdd(mod);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Exception! {ex.Message}{Environment.NewLine}{ex.StackTrace}", "Exception!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

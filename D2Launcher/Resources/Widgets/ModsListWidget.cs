@@ -125,7 +125,7 @@ namespace D2Launcher.Resources.Widgets
             FillModsComboBox();
         }
 
-        private static async Task CreateModInfoFileAsync(ModInfo mod, string modPath)
+        public static async Task CreateModInfoFileAsync(ModInfo mod, string modPath)
         {
             string modInfoFile = Path.Combine(modPath, "modInfo.json");
             string json = JsonSerializer.Serialize(mod, Program.SerializerOptions);
