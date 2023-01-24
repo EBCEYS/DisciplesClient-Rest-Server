@@ -234,7 +234,6 @@ namespace DisciplesClient_Update_Service.Controllers
         /// <response code="200">Successfully changed.</response>
         /// <response code="401">Unathorized.</response>
         /// <response code="404">User not found.</response>
-        /// <response code="500">Something wrong!</response>
         [Authorize]
         [HttpPost("change/password")]
         [ProducesResponseType(200)]
@@ -267,7 +266,6 @@ namespace DisciplesClient_Update_Service.Controllers
         /// <response code="200">Successfully changed.</response>
         /// <response code="401">Unathorized.</response>
         /// <response code="404">User not found.</response>
-        /// <response code="500">Something wrong!</response>
         [Authorize]
         [HttpPost("change/email")]
         [ProducesResponseType(200)]
@@ -300,7 +298,6 @@ namespace DisciplesClient_Update_Service.Controllers
         /// <response code="200">Successfully changed.</response>
         /// <response code="401">Unathorized.</response>
         /// <response code="404">User not found.</response>
-        /// <response code="500">Something wrong!</response>
         [Authorize]
         [HttpPost("change/username")]
         [ProducesResponseType(200)]

@@ -5,7 +5,6 @@ using Disciples2ClientDataBaseModels.DBModels;
 using DisciplesClient_Update_Service.LogicLayer.UsersLogic.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NLog;
-using System.Collections.Concurrent;
 using UserCache;
 
 namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter;

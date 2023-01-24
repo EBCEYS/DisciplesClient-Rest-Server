@@ -9,9 +9,9 @@ namespace DataBase.DataBaseAdapters.UsersDataBaseAdapter.Tests
     [TestClass()]
     public class UsersDBAdapterTests
     {
-        private IUsersDBAdapter Adapter { get; set; } = new UsersDBAdapter(LogManager.CreateNullLogger(), new UsersCacheAdapter(LogManager.CreateNullLogger(), new()));
+        private IUsersDBAdapter Adapter { get; } = new UsersDBAdapter(LogManager.CreateNullLogger(), new UsersCacheAdapter(LogManager.CreateNullLogger(), new()));
         [TestMethod()]
-        public async void LoginUserAsyncTest()
+        public async Task LoginUserAsyncTest()
         {
             User adm = await Adapter.LoginUserAsync("adm", "hvZeKKdU4acbLflANhWmxDbDLEKnWhDQKBOWG4bx5Cg=");
             Assert.IsNotNull(adm);
