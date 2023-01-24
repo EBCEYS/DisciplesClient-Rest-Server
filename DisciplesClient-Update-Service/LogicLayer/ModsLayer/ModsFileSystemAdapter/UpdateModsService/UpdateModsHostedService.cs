@@ -37,7 +37,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
         {
             await Task.Run(() =>
             {
-                updateModsTimer = new(ProcessAsync, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+                updateModsTimer = new(UpdateModServiceProcess, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
             }, cancellationToken);
         }
         /// <summary>
@@ -50,7 +50,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
             await updateModsTimer.DisposeAsync();
         }
 
-        private void ProcessAsync(object state)
+        private void UpdateModServiceProcess(object state)
         {
             Task.Run(async () =>
             {
@@ -67,7 +67,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
                     }
                     try
                     {
-                        await ProcessMod(mod);
+                        await ProcessModAsync(mod);
                     }
                     catch (Exception ex)
                     {
@@ -78,7 +78,7 @@ namespace DisciplesClient_Update_Service.LogicLayer.ModsLayer.ModsFileSystemAdap
             });
         }
 
-        private async Task ProcessMod(Mod mod)
+        private async Task ProcessModAsync(Mod mod)
         {
             string[] files = await fsAdapter.GetModFilesAsync(mod.Name);
             if (files == null)
