@@ -93,6 +93,16 @@ namespace D2Launcher.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap InfoWidgetBackGroundImage {
+            get {
+                object obj = ResourceManager.GetObject("InfoWidgetBackGroundImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap InstalledModsBackGroundImage {
             get {
                 object obj = ResourceManager.GetObject("InstalledModsBackGroundImage", resourceCulture);

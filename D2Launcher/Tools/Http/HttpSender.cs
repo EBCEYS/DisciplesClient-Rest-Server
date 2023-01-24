@@ -86,4 +86,29 @@ public class HttpSender : IHttpSender
             return null;
         }
     }
+
+    public string GetInfo()
+    {
+        try
+        {
+            UriBuilder builder = new(Program.Url)
+            {
+                Path = "/Info/info"
+            };
+            HttpRequestMessage msg = new(HttpMethod.Get, builder.Uri);
+            HttpResponseMessage res = client.Send(msg);
+            if (res.IsSuccessStatusCode)
+            {
+                using Stream stream = res.Content.ReadAsStream();
+                using StreamReader reader = new(stream);
+                return reader.ReadToEnd();
+            }
+            throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+            return null;
+        }
+    }
 }
