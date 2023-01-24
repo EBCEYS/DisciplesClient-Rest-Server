@@ -22,7 +22,7 @@ namespace D2Launcher.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace D2Launcher.Properties {
         ///   Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("D2Launcher.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace D2Launcher.Properties {
         ///   обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace D2Launcher.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ButtonsBackGroundImage {
+        public static System.Drawing.Bitmap ButtonsBackGroundImage {
             get {
                 object obj = ResourceManager.GetObject("ButtonsBackGroundImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace D2Launcher.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap d2_backgroundimage {
+        public static System.Drawing.Bitmap d2_backgroundimage {
             get {
                 object obj = ResourceManager.GetObject("d2_backgroundimage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace D2Launcher.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap D2OKButtonImage {
+        public static System.Drawing.Bitmap D2OKButtonImage {
             get {
                 object obj = ResourceManager.GetObject("D2OKButtonImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace D2Launcher.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap InstalledModsBackGroundImage {
+        public static System.Drawing.Bitmap InstalledModsBackGroundImage {
             get {
                 object obj = ResourceManager.GetObject("InstalledModsBackGroundImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,9 +103,19 @@ namespace D2Launcher.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ModsListBackGroundImage {
+        public static System.Drawing.Bitmap ModsListBackGroundImage {
             get {
                 object obj = ResourceManager.GetObject("ModsListBackGroundImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap SoftWidgetBackGroundImage {
+            get {
+                object obj = ResourceManager.GetObject("SoftWidgetBackGroundImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

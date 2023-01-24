@@ -11,6 +11,7 @@ namespace D2Launcher.Forms
 
             Widgets.Add(ModsListWidget);
             Widgets.Add(InstalledModsWidget);
+            Widgets.Add(SoftWidget);
 
             HideAllWidgets();
             //TODO: сейчас при работе с модами не обновляются списки в виджетах (обновляются только после перезапуска)
@@ -36,6 +37,12 @@ namespace D2Launcher.Forms
         {
             HideAllWidgets();
             InstalledModsWidget.ShowWidget();
+        }
+
+        private void SoftwareButton_Click(object sender, EventArgs e)
+        {
+            HideAllWidgets();
+            SoftWidget.ShowWidget();
         }
     }
 }

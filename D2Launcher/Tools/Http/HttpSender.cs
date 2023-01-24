@@ -61,4 +61,29 @@ public class HttpSender : IHttpSender
         }
         throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
     }
+    public ModInfo[] GetSoftInfo()
+    {
+        try
+        {
+            UriBuilder builder = new(Program.Url)
+            {
+                Path = "/d2client/soft/soft-list"
+            };
+            HttpRequestMessage msg = new(HttpMethod.Get, builder.Uri);
+            HttpResponseMessage res = client.Send(msg);
+            if (res.IsSuccessStatusCode)
+            {
+                using Stream stream = res.Content.ReadAsStream();
+                using StreamReader reader = new(stream);
+                string json = reader.ReadToEnd();
+                return JsonSerializer.Deserialize<ModInfo[]>(json, Program.SerializerOptions);
+            }
+            throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+            return null;
+        }
+    }
 }

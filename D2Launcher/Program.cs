@@ -59,10 +59,17 @@ namespace D2Launcher
         public static string BaseModsPath { get; } = Path.Combine(BasePath, "Mods");
         public static string BaseModsInfoFilePath { get; } = Path.Combine(BaseModsPath, "installedmodsinfo.json");
 
+        public static string BaseSoftPath { get; } = Path.Combine(BasePath, "Softwares");
+        public static string BaseSoftsInfoFilePath { get; } = Path.Combine(BaseSoftPath, "installedsoftsinfo.json");
+
         public static IHttpSender HttpSender { get; } = new HttpSender();
         public static string GetModDir(string modName)
         {
             return Path.Combine(BaseModsPath, modName);
+        }
+        public static string GetSoftDir(string softName)
+        {
+            return Path.Combine(BaseSoftPath, softName);
         }
     }
 }

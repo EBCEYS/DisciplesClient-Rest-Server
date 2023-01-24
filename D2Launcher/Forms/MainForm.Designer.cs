@@ -33,6 +33,8 @@
             this.ModsListWidget = new D2Launcher.Resources.Widgets.ModsListWidget();
             this.InstalledModsButton = new D2Launcher.Resources.Buttons.D2MainMenuButton();
             this.InstalledModsWidget = new D2Launcher.Resources.Widgets.InstalledD2ModsWidget();
+            this.SoftWidget = new D2Launcher.Resources.Widgets.SoftWidget();
+            this.SoftwareButton = new D2Launcher.Resources.Buttons.D2MainMenuButton();
             this.SuspendLayout();
             // 
             // d2MainMenuButton1
@@ -74,10 +76,35 @@
             // 
             // InstalledModsWidget
             // 
+            this.InstalledModsWidget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("InstalledModsWidget.BackgroundImage")));
+            this.InstalledModsWidget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.InstalledModsWidget.Location = new System.Drawing.Point(364, 12);
             this.InstalledModsWidget.Name = "InstalledModsWidget";
             this.InstalledModsWidget.Size = new System.Drawing.Size(424, 453);
             this.InstalledModsWidget.TabIndex = 3;
+            // 
+            // SoftWidget
+            // 
+            this.SoftWidget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("SoftWidget.BackgroundImage")));
+            this.SoftWidget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SoftWidget.Location = new System.Drawing.Point(364, 12);
+            this.SoftWidget.Name = "SoftWidget";
+            this.SoftWidget.Size = new System.Drawing.Size(424, 453);
+            this.SoftWidget.TabIndex = 4;
+            // 
+            // SoftwareButton
+            // 
+            this.SoftwareButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SoftwareButton.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.SoftwareButton.ForeColor = System.Drawing.Color.Black;
+            this.SoftwareButton.Image = ((System.Drawing.Image)(resources.GetObject("SoftwareButton.Image")));
+            this.SoftwareButton.Location = new System.Drawing.Point(12, 116);
+            this.SoftwareButton.Name = "SoftwareButton";
+            this.SoftwareButton.Size = new System.Drawing.Size(134, 46);
+            this.SoftwareButton.TabIndex = 5;
+            this.SoftwareButton.Text = "Software";
+            this.SoftwareButton.UseVisualStyleBackColor = true;
+            this.SoftwareButton.Click += new System.EventHandler(this.SoftwareButton_Click);
             // 
             // MainForm
             // 
@@ -87,6 +114,8 @@
             this.BackgroundImage = global::D2Launcher.Properties.Resources.d2_backgroundimage;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 477);
+            this.Controls.Add(this.SoftwareButton);
+            this.Controls.Add(this.SoftWidget);
             this.Controls.Add(this.InstalledModsWidget);
             this.Controls.Add(this.InstalledModsButton);
             this.Controls.Add(this.ModsListWidget);
@@ -108,5 +137,7 @@
         private Resources.Widgets.ModsListWidget ModsListWidget;
         private Resources.Buttons.D2MainMenuButton InstalledModsButton;
         private Resources.Widgets.InstalledD2ModsWidget InstalledModsWidget;
+        private Resources.Widgets.SoftWidget SoftWidget;
+        private Resources.Buttons.D2MainMenuButton SoftwareButton;
     }
 }

@@ -6,5 +6,6 @@ namespace D2Launcher.Tools.Http
     {
         Task<string> DownloadModFileAsync(string modName, string modDir);
         ModInfo[] GetModsInfo();
+        ModInfo[] GetSoftInfo();
     }
 }
