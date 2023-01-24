@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D2Launcher", "D2Launcher\D2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCache", "UserCacheAdapter\UserCache.csproj", "{63EB1F9F-2478-4DE3-927A-73435D373FA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disciples2.Info", "Disciples2.Info\Disciples2.Info.csproj", "{B7EE7FC8-AF05-40EF-90BD-32B37B6CE7E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{63EB1F9F-2478-4DE3-927A-73435D373FA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63EB1F9F-2478-4DE3-927A-73435D373FA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63EB1F9F-2478-4DE3-927A-73435D373FA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7EE7FC8-AF05-40EF-90BD-32B37B6CE7E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7EE7FC8-AF05-40EF-90BD-32B37B6CE7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7EE7FC8-AF05-40EF-90BD-32B37B6CE7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7EE7FC8-AF05-40EF-90BD-32B37B6CE7E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

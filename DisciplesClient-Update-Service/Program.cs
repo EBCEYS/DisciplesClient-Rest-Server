@@ -1,5 +1,7 @@
 using DataBase.DataBaseAdapters.UsersDataBaseAdapter;
 using DataBase.DataBaseAdapters.UsersDataBaseAdapter.Interface;
+using Disciples2.Info.InfoAdapter;
+using Disciples2.Info.InfoUpdateService;
 using Disciples2ClientDataBaseLibrary.DataBase;
 using Disciples2ClientDataBaseModels.DBModels;
 using DisciplesClient_Update_Service.DataBase.DataBaseAdapters.ModsDataBaseAdapter;
@@ -20,6 +22,7 @@ using NLog;
 using NLog.Web;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -63,8 +66,17 @@ namespace DisciplesClient_Update_Service
         /// The remove queue file path. (Store the queue in json).
         /// </summary>
         public static string RemoveQueueFilePath { get; private set; }
+        /// <summary>
+        /// The info file path.
+        /// </summary>
+        public static string InfoFilePath { get; private set; }
 
         private static ConcurrentDictionary<int, User> Users { get; } = new();
+        /// <summary>
+        /// The info adapter.
+        /// </summary>
+        private static InfoAdapter InfoAdapter { get; } = new();
+
         /// <summary>
         /// The main.
         /// </summary>
@@ -94,6 +106,7 @@ namespace DisciplesClient_Update_Service
             // Add services to the container.
             ConfigureJWTParams(logger, config);
 
+            InfoAdapter.SetInfoFilePath(InfoFilePath);
             ConfigureServices(logger, builder);
 
             builder.Host.UseNLog();
@@ -117,6 +130,11 @@ namespace DisciplesClient_Update_Service
             if (!Directory.Exists(ModsDirBasePath))
             {
                 Directory.CreateDirectory(ModsDirBasePath);
+            }
+            InfoFilePath = Path.Combine(BasePath, "info", config.GetValue<string>("InfoFilePath"));
+            if (!File.Exists(InfoFilePath))
+            {
+                throw new FileNotFoundException(InfoFilePath);
             }
         }
 
@@ -156,6 +174,9 @@ namespace DisciplesClient_Update_Service
 
             builder.Services.AddSingleton(Users);
             builder.Services.AddSingleton<IUsersCacheAdapter, UsersCacheAdapter>();
+
+            builder.Services.AddSingleton<IInfoAdapter>(InfoAdapter);
+            builder.Services.AddHostedService<InfoUpdateService>();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {

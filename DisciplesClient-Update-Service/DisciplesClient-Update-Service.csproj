@@ -34,9 +34,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Disciples2.Info\Disciples2.Info.csproj" />
     <ProjectReference Include="..\Disciples2ApiModels\Disciples2ApiModels.csproj" />
     <ProjectReference Include="..\Disciples2ClientDataBaseLibrary\Disciples2ClientDataBaseModels.csproj" />
     <ProjectReference Include="..\UserCacheAdapter\UserCache.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="info\info.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

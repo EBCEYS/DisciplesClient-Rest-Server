@@ -7,5 +7,7 @@ dotnet build DisciplesClient-Update-Service --configuration Release  -o .\d2serv
 @mkdir ..\builded
 @copy .\d2service\*.* ..\builded
 @copy ..\deploysettings\*.* ..\builded\*.* /Y
+@mkdir ..\builded\info
+@copy ..\deploysettings\info\*.* ..\builded\info\*.* /Y
 @rmdir /S /Q .\d2service
 pause
