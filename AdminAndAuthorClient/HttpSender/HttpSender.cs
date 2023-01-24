@@ -4,6 +4,7 @@ using Disciples2ApiModels.ApiModels;
 using Disciples2ApiModels.D2ApiModels;
 using Disciples2ClientDataBaseModels.DBModels;
 using Microsoft.AspNetCore.Http.Extensions;
+using System;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -612,6 +613,65 @@ namespace AdminAndAuthorClient.Http
             {
                 MessageBox.Show(ex.Message);
                 return null;
+            }
+        }
+
+        public string GetInfo()
+        {
+            try
+            {
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/Info/info"
+                };
+                HttpRequestMessage msg = new(HttpMethod.Get, builder.Uri);
+                HttpResponseMessage res = client.Send(msg);
+                if (res.IsSuccessStatusCode)
+                {
+                    using Stream stream = res.Content.ReadAsStream();
+                    using StreamReader reader = new(stream);
+                    return reader.ReadToEnd();
+                }
+                CheckUnathorized(res);
+                throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+
+        public bool PostInfo(string info)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(info))
+                {
+                    throw new ArgumentException($"\"{nameof(info)}\" не может быть пустым или содержать только пробел.", nameof(info));
+                }
+                QueryBuilder qBuilder = new()
+                {
+                    { "newInfo", info }
+                };
+                UriBuilder builder = new(Program.Url)
+                {
+                    Path = "/Info/info",
+                    Query = qBuilder.ToString()
+                };
+                HttpRequestMessage msg = new(HttpMethod.Post, builder.Uri);
+                HttpResponseMessage res = client.Send(msg);
+                if (res.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                CheckUnathorized(res);
+                throw new Exception($"Bad status code {res.StatusCode} {res.ReasonPhrase ?? "No reason"}!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
             }
         }
     }

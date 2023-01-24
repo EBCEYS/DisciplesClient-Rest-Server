@@ -173,8 +173,8 @@ namespace AdminAndAuthorClient.UserForms.MainUserForm
 
         private void InfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string info = $"If you have a questions about system you can go to github{Environment.NewLine}{Program.GitHub}{Environment.NewLine}or msg me to discord{Environment.NewLine}{Program.Discord}!";
-            MessageBox.Show(info, "Info");
+            InfoForm.InfoForm form = new();
+            form.ShowDialog();
         }
 
         private void UserNameToolStripMenuItem_Click(object sender, EventArgs e)

@@ -59,7 +59,7 @@ namespace DisciplesClient_Update_Service.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(typeof(string), 503)]
-        public async Task<ActionResult> SetInfoAsync([Required][FromBody] string newInfo)
+        public async Task<ActionResult> SetInfoAsync([Required]string newInfo)
         {
             if (string.IsNullOrWhiteSpace(newInfo))
             {

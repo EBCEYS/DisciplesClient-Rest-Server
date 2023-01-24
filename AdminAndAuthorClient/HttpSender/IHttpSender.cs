@@ -19,12 +19,14 @@ namespace AdminAndAuthorClient.Http
         Task DeleteModFileAsync(string modName, string fileName);
         bool DeleteUserById(int id);
         Task DownloadModFileAsync(string modName, string modFileSavePath, string extractPath);
+        string GetInfo();
         string[] GetModFiles(string modName);
         ModInfo[] GetModsInfo();
         Task<ModInfo[]> GetModsInfoAsync();
         ModInfo[] GetSoftInfo();
         User GetUserById(int id);
         bool Logout();
+        bool PostInfo(string info);
         string PostLoginRequest(string userName, string password);
         Task<string> PostLoginRequestAsync(string userName, string password);
         void SetToken(string token);
