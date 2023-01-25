@@ -185,7 +185,7 @@ namespace DisciplesClient_Update_Service
                 options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
                 options.JsonSerializerOptions.AllowTrailingCommas = true;
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            }); ;
+            });
 
             builder.Services.AddEndpointsApiExplorer();
 
